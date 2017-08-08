@@ -8,7 +8,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		local veh = GetVehiclePedIsUsing(GetPlayerPed(-1))
-		if IsPedInAnyVehicle(GetPlayerPed(-1),true) then
+		if IsPedInAnyVehicle(GetPlayerPed(-1),true) and GetSeatPedIsTryingToEnter(GetPlayerPed(-1)) == -1 or GetPedInVehicleSeat(veh, -1) == GetPlayerPed(-1) then
 			if curAlpha >= 255 then
 				curAlpha = 255
 			else
@@ -53,7 +53,7 @@ Citizen.CreateThread(function()
 						showHighBeams,showLowBeams = false,true
 					end
 				else
-					curNeedle, curTachometer, curSpeedometer, showHighBeams, showLowBeams, showDamageYellow, showDamageRed = "needle_day", "tachometer_day", "speedometer_day", false, false, false, false
+					curNeedle, curTachometer, curSpeedometer, showHighBeams, showLowBeams = "needle_day", "tachometer_day", "speedometer_day", false, false
 				end
 				if GetEntitySpeed(veh) > 0 then degree=(GetEntitySpeed(veh)*2.236936)*step end
 				if degree > 290 then degree=290 end

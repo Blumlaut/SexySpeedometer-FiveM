@@ -36,6 +36,12 @@ Citizen.CreateThread(function()
 					RPM = RPM+math.random(-2,2)
 					RPM = RPM/100
 				end
+				engineHealth = GetVehicleEngineHealth(veh)
+				if engineHealth <= 300 and engineHealth > 0 then
+					showDamageYellow,showDamageRed = true,false
+				elseif engineHealth <= 0 then
+					showDamageYellow,showDamageRed = false, true
+				end
 				_,lightson,highbeams = GetVehicleLightsState(veh)
 				if lightson == 1 or highbeams == 1 then	
 					curNeedle, curTachometer, curSpeedometer = "needle", "tachometer", "speedometer"
@@ -45,7 +51,7 @@ Citizen.CreateThread(function()
 						showHighBeams,showLowBeams = false,true
 					end
 				else
-					curNeedle, curTachometer, curSpeedometer, showHighBeams, showLowBeams = "needle_day", "tachometer_day", "speedometer_day", false, false
+					curNeedle, curTachometer, curSpeedometer, showHighBeams, showLowBeams, showDamageYellow, showDamageRed = "needle_day", "tachometer_day", "speedometer_day", false, false, false, false
 				end
 				if GetEntitySpeed(veh) > 0 then degree=(GetEntitySpeed(veh)*2.236936)*step end
 				if degree > 290 then degree=290 end
@@ -56,16 +62,15 @@ Citizen.CreateThread(function()
 			else
 				RPM, degree = 0, 0
 			end
-			Citizen.Trace(GetVehicleEngineHealth(veh))
-			if GetVehicleEngineHealth(veh) <= 300 and GetVehicleEngineHealth(veh) > 0 then
-				DrawSprite("speedometer", "engine", 0.935,0.882,0.022,0.025,0, 255, 191, 0, curAlpha)
-			elseif GetVehicleEngineHealth(veh) <= 0 then
-				DrawSprite("speedometer", "engine", 0.935,0.882,0.022,0.025,0, 255, 0, 0, curAlpha)
-			end
 			if showHighBeams then
 				DrawSprite("speedometer", "lights", 0.810,0.892,0.018,0.02,0, 0, 50, 240, curAlpha)
 			elseif showLowBeams then
 				DrawSprite("speedometer", "lights", 0.810,0.892,0.018,0.02,0, 0, 255, 0, curAlpha)
+			end
+			if showDamageYellow then
+				DrawSprite("speedometer", "engine", 0.935,0.882,0.022,0.025,0, 255, 191, 0, curAlpha)
+			elseif showDamageRed then
+				DrawSprite("speedometer", "engine", 0.935,0.882,0.022,0.025,0, 255, 0, 0, curAlpha)
 			end -- MAKE SURE TO DRAW THIS BEFORE THE TACHO NEEDLE, OTHERWISE OVERLAPPING WILL HAPPEN!
 			DrawSprite("speedometer", curSpeedometer, 0.800,0.860,0.12,0.185, 0.0, 255, 255, 255, curAlpha)
 			DrawSprite("speedometer", curTachometer, 0.920,0.860,0.12,0.185, 0.0, 255, 255, 255, curAlpha)

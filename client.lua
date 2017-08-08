@@ -28,7 +28,7 @@ Citizen.CreateThread(function()
 			end
 		else
 			if DoesEntityExist(veh) and not IsEntityDead(veh) then
-				degree, step = 0, 2.05833
+				degree, step = 0, 2.32833
 				RPM = GetVehicleCurrentRpm(veh)
 				if not GetIsVehicleEngineRunning(veh) then RPM = 0 end -- fix for R*'s Engine RPM fuckery
 				if RPM > 0.99 then
@@ -56,7 +56,7 @@ Citizen.CreateThread(function()
 				else
 					curNeedle, curTachometer, curSpeedometer, showHighBeams, showLowBeams = "needle_day", "tachometer_day", "speedometer_day", false, false
 				end
-				if GetEntitySpeed(veh) > 0 then degree=(GetEntitySpeed(veh)*2.236936)*step end
+				if GetEntitySpeed(veh) > 0 then degree=(GetEntitySpeed(veh)*2.036936)*step end
 				if degree > 290 then degree=290 end
 				if GetVehicleClass(veh) >= 0 and GetVehicleClass(veh) < 13 or GetVehicleClass(veh) > 17 then
 				else

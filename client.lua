@@ -56,6 +56,12 @@ Citizen.CreateThread(function()
 			else
 				RPM, degree = 0, 0
 			end
+			Citizen.Trace(GetVehicleEngineHealth(veh))
+			if GetVehicleEngineHealth(veh) <= 300 and GetVehicleEngineHealth(veh) > 0 then
+				DrawSprite("speedometer", "engine", 0.935,0.882,0.022,0.025,0, 255, 191, 0, curAlpha)
+			elseif GetVehicleEngineHealth(veh) <= 0 then
+				DrawSprite("speedometer", "engine", 0.935,0.882,0.022,0.025,0, 255, 0, 0, curAlpha)
+			end
 			if showHighBeams then
 				DrawSprite("speedometer", "lights", 0.810,0.892,0.018,0.02,0, 0, 50, 240, curAlpha)
 			elseif showLowBeams then

@@ -40,12 +40,12 @@ Citizen.CreateThread(function()
 				if lightson == 1 or highbeams == 1 then	
 					curNeedle, curTachometer, curSpeedometer = "needle", "tachometer", "speedometer"
 					if highbeams == 1 then
-						DrawSprite("speedometer", "lights", 0.810,0.892,0.02,0.02,0, 0, 50, 240, curAlpha)
-					else
-						DrawSprite("speedometer", "lights", 0.810,0.892,0.02,0.02,0, 0, 255, 0, curAlpha)
+						showHighBeams,showLowBeams = true,false
+					elseif lightson == 1 and highbeams == 0 then
+						showHighBeams,showLowBeams = false,true
 					end
 				else
-					curNeedle, curTachometer, curSpeedometer = "needle_day", "tachometer_day", "speedometer_day"
+					curNeedle, curTachometer, curSpeedometer, showHighBeams, showLowBeams = "needle_day", "tachometer_day", "speedometer_day", false, false
 				end
 				if GetEntitySpeed(veh) > 0 then degree=(GetEntitySpeed(veh)*2.236936)*step end
 				if degree > 290 then degree=290 end
@@ -60,6 +60,11 @@ Citizen.CreateThread(function()
 			DrawSprite("speedometer", curTachometer, 0.920,0.860,0.12,0.185, 0.0, 255, 255, 255, curAlpha)
 			DrawSprite("speedometer", curNeedle, 0.800,0.862,0.076,0.15,-5.00001+degree, 255, 255, 255, curAlpha)
 			DrawSprite("speedometer", curNeedle, 0.920,0.862,0.076,0.15,RPM*280-30, 255, 255, 255, curAlpha)
+			if showHighBeams then
+				DrawSprite("speedometer", "lights", 0.810,0.892,0.018,0.02,0, 0, 50, 240, curAlpha)
+			elseif showLowBeams then
+				DrawSprite("speedometer", "lights", 0.810,0.892,0.018,0.02,0, 0, 255, 0, curAlpha)
+			end
 		end
 	end
 end)

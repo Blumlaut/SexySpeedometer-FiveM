@@ -7,7 +7,7 @@ degree = 0
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		local veh = GetVehiclePedIsUsing(GetPlayerPed(-1), false)
+		local veh = GetVehiclePedIsUsing(GetPlayerPed(-1))
 		if IsPedInAnyVehicle(GetPlayerPed(-1),true) then
 			if curAlpha >= 255 then
 				curAlpha = 255

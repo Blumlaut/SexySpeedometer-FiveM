@@ -37,9 +37,10 @@ Citizen.CreateThread(function()
 					RPM = RPM/100
 				end
 				engineHealth = GetVehicleEngineHealth(veh)
-				if engineHealth <= 350 and engineHealth > 0 then
+				Citizen.Trace(engineHealth)
+				if engineHealth <= 350 and engineHealth > 100 then
 					showDamageYellow,showDamageRed = true,false
-				elseif engineHealth <= 0 then
+				elseif engineHealth <= 100 then
 					showDamageYellow,showDamageRed = false, true
 				else
 					showDamageYellow,showDamageRed = false, false

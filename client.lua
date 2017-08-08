@@ -1,9 +1,5 @@
-curNeedle = "needle_day"
-curTachometer = "tachometer_day"
-curSpeedometer = "speedometer_day"
-curAlpha = 0
-RPM = 0
-degree = 0
+curNeedle, curTachometer, curSpeedometer, curAlpha = "needle_day", "tachometer_day", "speedometer_day",	0
+RPM, degree = 0, 0
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -80,4 +76,5 @@ Citizen.CreateThread(function()
 			DrawSprite("speedometer", curNeedle, 0.920,0.862,0.076,0.15,RPM*280-30, 255, 255, 255, curAlpha)
 		end
 	end
+	
 end)

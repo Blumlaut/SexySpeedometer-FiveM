@@ -7,7 +7,7 @@ degree = 0
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		local veh = GetVehiclePedIsIn(GetPlayerPed(-1), false)
+		local veh = GetVehiclePedIsUsing(GetPlayerPed(-1), false)
 		if IsPedInAnyVehicle(GetPlayerPed(-1),true) then
 			if curAlpha >= 255 then
 				curAlpha = 255
@@ -37,10 +37,12 @@ Citizen.CreateThread(function()
 					RPM = RPM/100
 				end
 				engineHealth = GetVehicleEngineHealth(veh)
-				if engineHealth <= 300 and engineHealth > 0 then
+				if engineHealth <= 350 and engineHealth > 0 then
 					showDamageYellow,showDamageRed = true,false
 				elseif engineHealth <= 0 then
 					showDamageYellow,showDamageRed = false, true
+				else
+					showDamageYellow,showDamageRed = false, false
 				end
 				_,lightson,highbeams = GetVehicleLightsState(veh)
 				if lightson == 1 or highbeams == 1 then	

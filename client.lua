@@ -1,5 +1,6 @@
 curNeedle, curTachometer, curSpeedometer, curAlpha = "needle_day", "tachometer_day", "speedometer_day",	0
 RPM, degree, blinkertick, showBlinker = 0, 0, 0, false
+overwriteChecks = false
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -51,6 +52,20 @@ Citizen.CreateThread(function()
 				else
 					showDamageYellow,showDamageRed = false, false
 				end
+				OilLevel = GetVehicleOilLevel(veh)
+				FuelLevel = GetVehicleFuelLevel(veh)
+				if FuelLevel <= 20.0 and FuelLevel > 10.0 then
+					showLowFuelYellow,showLowFuelRed = true,false
+				elseif FuelLevel <= 10.0 then
+					showLowFuelYellow,showLowFuelRed = false,true
+				else
+					showLowFuelYellow,showLowFuelRed = false,false
+				end
+				if OilLevel <= 0.5 then
+					showLowOil = true
+				else
+					showLowOil = false
+				end
 				_,lightson,highbeams = GetVehicleLightsState(veh)
 				if lightson == 1 or highbeams == 1 then	
 					curNeedle, curTachometer, curSpeedometer = "needle", "tachometer", "speedometer"
@@ -71,6 +86,16 @@ Citizen.CreateThread(function()
 			else
 				RPM, degree = 0, 0
 			end
+			if overwriteChecks then
+				showHighBeams = true
+				showLowBeams = true
+				showBlinker = true
+				blinkerleft = true 
+				blinkerright = true
+				showDamageRed = true
+				showLowFuel = true
+				showLowOil = true
+			end
 			if showHighBeams then
 				DrawSprite("speedometer", "lights", 0.810,0.892,0.018,0.02,0, 0, 50, 240, curAlpha)
 			elseif showLowBeams then
@@ -80,12 +105,20 @@ Citizen.CreateThread(function()
 				DrawSprite("speedometer", "blinker", 0.905,0.834,0.022,0.03,180.0, 124,252,0, curAlpha)
 			end
 			if blinkerright and showBlinker then
-				DrawSprite("speedometer", "blinker", 0.935,0.832,0.022,0.030,0.0, 124,252,0, curAlpha)
+				DrawSprite("speedometer", "blinker", 0.935,0.833,0.022,0.030,0.0, 124,252,0, curAlpha)
+			end
+			if showLowFuelYellow then
+				DrawSprite("speedometer", "fuel", 0.905,0.892,0.012,0.025,0, 255, 191, 0, curAlpha)
+			elseif showLowFuelRed then
+				DrawSprite("speedometer", "fuel", 0.905,0.892,0.012,0.025,0, 255, 0, 0, curAlpha)
+			end
+			if showLowOil then
+				DrawSprite("speedometer", "oil", 0.900,0.862,0.020,0.025,0, 255, 0, 0, curAlpha)
 			end
 			if showDamageYellow then
-				DrawSprite("speedometer", "engine", 0.935,0.882,0.022,0.025,0, 255, 191, 0, curAlpha)
+				DrawSprite("speedometer", "engine", 0.930,0.892,0.020,0.025,0, 255, 191, 0, curAlpha)
 			elseif showDamageRed then
-				DrawSprite("speedometer", "engine", 0.935,0.882,0.022,0.025,0, 255, 0, 0, curAlpha)
+				DrawSprite("speedometer", "engine", 0.930,0.892,0.020,0.025,0, 255, 0, 0, curAlpha)
 			end -- MAKE SURE TO DRAW THIS BEFORE THE TACHO NEEDLE, OTHERWISE OVERLAPPING WILL HAPPEN!
 			DrawSprite("speedometer", curSpeedometer, 0.800,0.860,0.12,0.185, 0.0, 255, 255, 255, curAlpha)
 			DrawSprite("speedometer", curTachometer, 0.920,0.860,0.12,0.185, 0.0, 255, 255, 255, curAlpha)

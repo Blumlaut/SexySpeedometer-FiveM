@@ -1,5 +1,5 @@
 curNeedle, curTachometer, curSpeedometer, curAlpha = "needle_day", "tachometer_day", "speedometer_day",	0
-RPM, degree = 0, 0
+RPM, degree, blinkertick, showBlinker = 0, 0, 0, false
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -31,6 +31,20 @@ Citizen.CreateThread(function()
 					RPM = RPM*100
 					RPM = RPM+math.random(-2,2)
 					RPM = RPM/100
+				end
+				_,blinkerleft,blinkerright = "eh",false,false -- owo whats this
+
+				if blinkerleft or blinkerright then
+				blinkertick = blinkertick+32
+					if blinkertick >= 0 then
+						showBlinker = true
+					end
+					if blinkertick >= 1000 then
+						showBlinker = false
+					end
+					if blinkertick >= 2000 then
+						blinkertick = 0
+					end
 				end
 				engineHealth = GetVehicleEngineHealth(veh)
 				if engineHealth <= 350 and engineHealth > 100 then
@@ -64,6 +78,12 @@ Citizen.CreateThread(function()
 				DrawSprite("speedometer", "lights", 0.810,0.892,0.018,0.02,0, 0, 50, 240, curAlpha)
 			elseif showLowBeams then
 				DrawSprite("speedometer", "lights", 0.810,0.892,0.018,0.02,0, 0, 255, 0, curAlpha)
+			end
+			if blinkerleft and showBlinker then
+				DrawSprite("speedometer", "blinker", 0.905,0.834,0.022,0.03,180.0, 124,252,0, curAlpha)
+			end
+			if blinkerright and showBlinker then
+				DrawSprite("speedometer", "blinker", 0.935,0.832,0.022,0.030,0.0, 124,252,0, curAlpha)
 			end
 			if showDamageYellow then
 				DrawSprite("speedometer", "engine", 0.935,0.882,0.022,0.025,0, 255, 191, 0, curAlpha)

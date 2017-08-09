@@ -83,7 +83,7 @@ Citizen.CreateThread(function()
 				blinkerleft = true 
 				blinkerright = true
 				showDamageRed = true
-				showLowFuel = true
+				showLowFuelRed = true
 				showLowOil = true
 			end
 			if showHighBeams then

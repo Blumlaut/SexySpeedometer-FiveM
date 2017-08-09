@@ -32,20 +32,19 @@ Citizen.CreateThread(function()
 					RPM = RPM+math.random(-2,2)
 					RPM = RPM/100
 				end
-				_,blinkerleft,blinkerright = "eh",false,false -- owo whats this
-
-				if blinkerleft or blinkerright then
-				blinkertick = blinkertick+32
-					if blinkertick >= 0 then
-						showBlinker = true
-					end
-					if blinkertick >= 1000 then
-						showBlinker = false
-					end
-					if blinkertick >= 2000 then
-						blinkertick = 0
-					end
-				end
+				_,blinkerleft,blinkerright = "eh",true,true -- owo whats this
+--				if blinkerleft or blinkerright then
+--					if blinkertick >= 50 and blinkertick < 100 then
+--						showBlinker = false
+--					elseif blinkertick >= 0 then
+--						showBlinker = true
+--						SetVehicleIndicatorLights(veh, 1, true)
+--						SetVehicleIndicatorLights(veh, 0, true)
+--					end
+--					if blinkertick >= 100 then
+--						blinkertick = 0
+--					end
+--				end
 				engineHealth = GetVehicleEngineHealth(veh)
 				if engineHealth <= 350 and engineHealth > 100 then
 					showDamageYellow,showDamageRed = true,false
@@ -98,3 +97,16 @@ Citizen.CreateThread(function()
 	end
 	
 end)
+
+
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(485)
+		showBlinker = true
+		Citizen.Wait(485)
+		showBlinker = false
+	end
+end
+)
+			

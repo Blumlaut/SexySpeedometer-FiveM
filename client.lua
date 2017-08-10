@@ -33,7 +33,17 @@ Citizen.CreateThread(function()
 					RPM = RPM+math.random(-2,2)
 					RPM = RPM/100
 				end
-				_,blinkerleft,blinkerright = "eh",IsVehicleLeftBlinkerActive(veh),IsVehicleRightBlinkerActive(veh) -- owo whats this
+				blinkerstate = GetVehicleIndicatorLights(veh) -- owo whats this
+				if blinkerstate == 0 then
+					blinkerleft,blinkerright = false,false
+				elseif blinkerstate == 1 then
+					blinkerleft,blinkerright = true,false
+				elseif blinkerstate == 2 then
+					blinkerleft,blinkerright = false,true
+				elseif blinkerstate == 3 then 
+					blinkerleft,blinkerright = true,true
+				end
+				
 				engineHealth = GetVehicleEngineHealth(veh)
 				if engineHealth <= 350 and engineHealth > 100 then
 					showDamageYellow,showDamageRed = true,false

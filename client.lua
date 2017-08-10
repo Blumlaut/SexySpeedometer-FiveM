@@ -4,7 +4,7 @@ showFuelGauge = true -- use fuel gauge?
 
 curNeedle, curTachometer, curSpeedometer, curFuelGauge, curAlpha = "needle_day", "tachometer_day", "speedometer_day", "fuelgauge_day",0
 RPM, degree, blinkertick, showBlinker = 0, 0, 0, false
-overwriteChecks = false
+overwriteChecks = FALSE -- debug value to display all icons
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -47,7 +47,6 @@ Citizen.CreateThread(function()
 				elseif blinkerstate == 3 then 
 					blinkerleft,blinkerright = true,true
 				end
-				
 				engineHealth = GetVehicleEngineHealth(veh)
 				if engineHealth <= 350 and engineHealth > 100 then
 					showDamageYellow,showDamageRed = true,false
@@ -92,14 +91,7 @@ Citizen.CreateThread(function()
 				RPM, degree = 0, 0
 			end
 			if overwriteChecks then
-				showHighBeams = true
-				showLowBeams = true
-				showBlinker = true
-				blinkerleft = true 
-				blinkerright = true
-				showDamageRed = true
-				showLowFuelRed = true
-				showLowOil = true
+				showHighBeams,showLowBeams,showBlinker,blinkerleft,blinkerright,showDamageRed,showLowFuelRed,showLowOil = true, true, true, true, true ,true, true, true
 			end
 			if showHighBeams then
 				DrawSprite("speedometer", "lights", 0.810,0.892,0.018,0.02,0, 0, 50, 240, curAlpha)

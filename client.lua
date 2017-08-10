@@ -1,4 +1,8 @@
-curNeedle, curTachometer, curSpeedometer, curAlpha = "needle_day", "tachometer_day", "speedometer_day",	0
+--SETTINGS--
+showFuelGauge = true -- use fuel gauge?
+--SETTINGS END--
+
+curNeedle, curTachometer, curSpeedometer, curFuelGauge, curAlpha = "needle_day", "tachometer_day", "speedometer_day", "fuelgauge_day",0
 RPM, degree, blinkertick, showBlinker = 0, 0, 0, false
 overwriteChecks = false
 Citizen.CreateThread(function()
@@ -54,9 +58,10 @@ Citizen.CreateThread(function()
 				end
 				OilLevel = GetVehicleOilLevel(veh)
 				FuelLevel = GetVehicleFuelLevel(veh)
-				if FuelLevel <= 20.0 and FuelLevel > 10.0 then
+				MaxFuelLevel = Citizen.InvokeNative(0x642FC12F, veh, "CHandlingData", "fPetrolTankVolume", Citizen.ReturnResultAnyway(), Citizen.ResultAsFloat())
+				if FuelLevel <= MaxFuelLevel*0.25 and FuelLevel > MaxFuelLevel*0.13 then
 					showLowFuelYellow,showLowFuelRed = true,false
-				elseif FuelLevel <= 10.0 then
+				elseif FuelLevel <= MaxFuelLevel*0.2 then
 					showLowFuelYellow,showLowFuelRed = false,true
 				else
 					showLowFuelYellow,showLowFuelRed = false,false
@@ -68,14 +73,14 @@ Citizen.CreateThread(function()
 				end
 				_,lightson,highbeams = GetVehicleLightsState(veh)
 				if lightson == 1 or highbeams == 1 then	
-					curNeedle, curTachometer, curSpeedometer = "needle", "tachometer", "speedometer"
+					curNeedle, curTachometer, curSpeedometer, curFuelGauge = "needle", "tachometer", "speedometer", "fuelgauge"
 					if highbeams == 1 then
 						showHighBeams,showLowBeams = true,false
 					elseif lightson == 1 and highbeams == 0 then
 						showHighBeams,showLowBeams = false,true
 					end
 				else
-					curNeedle, curTachometer, curSpeedometer, showHighBeams, showLowBeams = "needle_day", "tachometer_day", "speedometer_day", false, false
+					curNeedle, curTachometer, curSpeedometer, curFuelGauge, showHighBeams, showLowBeams = "needle_day", "tachometer_day", "speedometer_day", "fuelgauge_day", false, false
 				end
 				if GetEntitySpeed(veh) > 0 then degree=(GetEntitySpeed(veh)*2.036936)*step end
 				if degree > 290 then degree=290 end
@@ -124,6 +129,10 @@ Citizen.CreateThread(function()
 			DrawSprite("speedometer", curTachometer, 0.920,0.860,0.12,0.185, 0.0, 255, 255, 255, curAlpha)
 			DrawSprite("speedometer", curNeedle, 0.800,0.862,0.076,0.15,-5.00001+degree, 255, 255, 255, curAlpha)
 			DrawSprite("speedometer", curNeedle, 0.920,0.862,0.076,0.15,RPM*280-30, 255, 255, 255, curAlpha)
+			if showFuelGauge and FuelLevel then
+				DrawSprite("speedometer", curFuelGauge, 0.860, 0.780,0.04, 0.04, 0.0, 255,255,255, curAlpha)
+				DrawSprite("speedometer", curNeedle, 0.860,0.800,0.040,0.08,80.0+FuelLevel/MaxFuelLevel*110, 255, 255, 255, curAlpha)
+			end
 		end
 	end
 	

@@ -4,7 +4,7 @@ showFuelGauge = true -- use fuel gauge?
 
 curNeedle, curTachometer, curSpeedometer, curFuelGauge, curAlpha = "needle_day", "tachometer_day", "speedometer_day", "fuelgauge_day",0
 RPM, degree, blinkertick, showBlinker = 0, 0, 0, false
-overwriteChecks = FALSE -- debug value to display all icons
+overwriteChecks = false -- debug value to display all icons
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -105,9 +105,9 @@ Citizen.CreateThread(function()
 				DrawSprite("speedometer", "blinker", 0.935,0.833,0.022,0.030,0.0, 124,252,0, curAlpha)
 			end
 			if showLowFuelYellow then
-				DrawSprite("speedometer", "fuel", 0.905,0.892,0.012,0.025,0, 255, 191, 0, curAlpha)
+				DrawSprite("speedometer", "fuel", 0.905,0.890,0.012,0.025,0, 255, 191, 0, curAlpha)
 			elseif showLowFuelRed then
-				DrawSprite("speedometer", "fuel", 0.905,0.892,0.012,0.025,0, 255, 0, 0, curAlpha)
+				DrawSprite("speedometer", "fuel", 0.905,0.890,0.012,0.025,0, 255, 0, 0, curAlpha)
 			end
 			if showLowOil then
 				DrawSprite("speedometer", "oil", 0.900,0.862,0.020,0.025,0, 255, 0, 0, curAlpha)

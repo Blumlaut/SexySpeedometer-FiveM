@@ -83,7 +83,7 @@ Citizen.CreateThread(function()
 				end
 				if GetEntitySpeed(veh) > 0 then degree=(GetEntitySpeed(veh)*2.036936)*step end
 				if degree > 290 then degree=290 end
-				if GetVehicleClass(veh) >= 0 and GetVehicleClass(veh) < 13 or GetVehicleClass(veh) > 17 then
+				if GetVehicleClass(veh) >= 0 and GetVehicleClass(veh) < 13 or GetVehicleClass(veh) >= 17 then
 				else
 					curAlpha = 0
 				end
@@ -104,24 +104,28 @@ Citizen.CreateThread(function()
 			if blinkerright and showBlinker then
 				DrawSprite("speedometer", "blinker", 0.935,0.833,0.022,0.030,0.0, 124,252,0, curAlpha)
 			end
-			if showLowFuelYellow then
-				DrawSprite("speedometer", "fuel", 0.905,0.890,0.012,0.025,0, 255, 191, 0, curAlpha)
-			elseif showLowFuelRed then
-				DrawSprite("speedometer", "fuel", 0.905,0.890,0.012,0.025,0, 255, 0, 0, curAlpha)
-			end
-			if showLowOil then
-				DrawSprite("speedometer", "oil", 0.900,0.862,0.020,0.025,0, 255, 0, 0, curAlpha)
+			if MaxFuelLevel ~= 0 then
+				if showLowFuelYellow then
+					DrawSprite("speedometer", "fuel", 0.905,0.890,0.012,0.025,0, 255, 191, 0, curAlpha)
+				elseif showLowFuelRed then
+					DrawSprite("speedometer", "fuel", 0.905,0.890,0.012,0.025,0, 255, 0, 0, curAlpha)
+				end
+				if showLowOil then
+					DrawSprite("speedometer", "oil", 0.900,0.862,0.020,0.025,0, 255, 0, 0, curAlpha)
+				end -- MAKE SURE TO DRAW THIS BEFORE THE TACHO NEEDLE, OTHERWISE OVERLAPPING WILL HAPPEN!
 			end
 			if showDamageYellow then
 				DrawSprite("speedometer", "engine", 0.930,0.892,0.020,0.025,0, 255, 191, 0, curAlpha)
 			elseif showDamageRed then
 				DrawSprite("speedometer", "engine", 0.930,0.892,0.020,0.025,0, 255, 0, 0, curAlpha)
-			end -- MAKE SURE TO DRAW THIS BEFORE THE TACHO NEEDLE, OTHERWISE OVERLAPPING WILL HAPPEN!
+			end
 			DrawSprite("speedometer", curSpeedometer, 0.800,0.860,0.12,0.185, 0.0, 255, 255, 255, curAlpha)
-			DrawSprite("speedometer", curTachometer, 0.920,0.860,0.12,0.185, 0.0, 255, 255, 255, curAlpha)
+			if MaxFuelLevel ~= 0 then
+				DrawSprite("speedometer", curTachometer, 0.920,0.860,0.12,0.185, 0.0, 255, 255, 255, curAlpha)
+				DrawSprite("speedometer", curNeedle, 0.920,0.862,0.076,0.15,RPM*280-30, 255, 255, 255, curAlpha)
+			end
 			DrawSprite("speedometer", curNeedle, 0.800,0.862,0.076,0.15,-5.00001+degree, 255, 255, 255, curAlpha)
-			DrawSprite("speedometer", curNeedle, 0.920,0.862,0.076,0.15,RPM*280-30, 255, 255, 255, curAlpha)
-			if showFuelGauge and FuelLevel then
+			if showFuelGauge and FuelLevel and MaxFuelLevel ~= 0 then
 				DrawSprite("speedometer", curFuelGauge, 0.860, 0.780,0.04, 0.04, 0.0, 255,255,255, curAlpha)
 				DrawSprite("speedometer", curNeedle, 0.860,0.800,0.040,0.08,80.0+FuelLevel/MaxFuelLevel*110, 255, 255, 255, curAlpha)
 			end

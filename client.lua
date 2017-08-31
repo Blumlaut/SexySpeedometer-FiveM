@@ -90,6 +90,10 @@ Citizen.CreateThread(function()
 			else
 				RPM, degree = 0, 0
 			end
+			
+			if RPM < 0.12 or not RPM then 
+				RPM = 0.12
+			end
 			if overwriteChecks then
 				showHighBeams,showLowBeams,showBlinker,blinkerleft,blinkerright,showDamageRed,showLowFuelRed,showLowOil = true, true, true, true, true ,true, true, true
 			end

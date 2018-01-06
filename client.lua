@@ -2,6 +2,7 @@
 showFuelGauge = true -- use fuel gauge?
 skins = {}
 --SETTINGS END--
+overwriteAlpha = false
 
 function addSkin(skin)
 	table.insert(skins,skin)
@@ -24,6 +25,16 @@ function changeSkin(skin)
 		end
 	end
 	return false
+end
+
+function toggleSpeedo(state)
+	if state == true then
+		overwriteAlpha = false
+	elseif state == false then
+		overwriteAlpha = true
+	else
+		overwriteAlpha = not overwriteAlpha
+	end
 end
 
 Citizen.CreateThread(function()
@@ -51,6 +62,11 @@ RegisterCommand("speedoskin", function(source, args, rawCommand)
 	end
 end, false)
 
+RegisterCommand("togglespeedo", function(source, args, rawCommand)
+	toggleSpeedo()
+end, false)
+
+
 curNeedle, curTachometer, curSpeedometer, curFuelGauge, curAlpha = "needle_day", "tachometer_day", "speedometer_day", "fuelgauge_day",0
 RPM, degree, blinkertick, showBlinker = 0, 0, 0, false
 overwriteChecks = false -- debug value to display all icons
@@ -58,6 +74,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		local veh = GetVehiclePedIsUsing(GetPlayerPed(-1))
+		if overwriteAlpha then curAlpha = 0 end
 		if not overwriteAlpha then
 			if IsPedInAnyVehicle(GetPlayerPed(-1),true) and GetSeatPedIsTryingToEnter(GetPlayerPed(-1)) == -1 or GetPedInVehicleSeat(veh, -1) == GetPlayerPed(-1) then
 					if curAlpha >= 255 then

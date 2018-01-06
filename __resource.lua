@@ -13,5 +13,6 @@ client_scripts {
 exports {
 	"getAvailableSkins",
 	"changeSkin",
-	"addSkin"
+	"addSkin",
+	"toggleSpeedo",
 }

@@ -175,7 +175,7 @@ Citizen.CreateThread(function()
 				DrawSprite(cst.ytdName, "blinker", cst.centerCoords[1]+cst.blinkerLoc[1],cst.centerCoords[2]+cst.blinkerLoc[2],cst.blinkerLoc[3],cst.blinkerLoc[4],180.0, 124,252,0, curAlpha)
 			end
 			if blinkerright and showBlinker then
-				DrawSprite(cst.ytdName, "blinker", cst.centerCoords[1]+cst.blinkerLoc[1],cst.centerCoords[2]+cst.blinkerLoc[2],cst.blinkerLoc[3],cst.blinkerLoc[4],0.0, 124,252,0, curAlpha)
+				DrawSprite(cst.ytdName, "blinker", cst.centerCoords[1]+cst.blinkerLoc[1]+0.03,cst.centerCoords[2]+cst.blinkerLoc[2]-0.001,cst.blinkerLoc[3],cst.blinkerLoc[4],0.0, 124,252,0, curAlpha)
 			end
 			if MaxFuelLevel ~= 0 then
 				if showLowFuelYellow then

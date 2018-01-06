@@ -3,7 +3,7 @@
 local skinData = {
 	-- names
 	skinName = "default_middle",
-	ytdName = "default_middle",
+	ytdName = "default",
 	-- texture dictionary informations:
 	-- night textures are supposed to look like this:
 	-- "needle", "tachometer", "speedometer", "fuelgauge"

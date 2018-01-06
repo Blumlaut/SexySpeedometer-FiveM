@@ -20,11 +20,16 @@ function changeSkin(skin)
 	for i,theSkin in pairs(skins) do
 		if theSkin.skinName == skin then
 			cst = theSkin
+			currentSkin = theSkin.skinName
 			SetResourceKvp("sexyspeedo_skin", skin)
 			return true
 		end
 	end
 	return false
+end
+
+function getCurrentSkin()
+	return currentSkin
 end
 
 function toggleSpeedo(state)

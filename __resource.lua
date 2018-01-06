@@ -15,4 +15,5 @@ exports {
 	"changeSkin",
 	"addSkin",
 	"toggleSpeedo",
+	"getCurrentSkin",
 }

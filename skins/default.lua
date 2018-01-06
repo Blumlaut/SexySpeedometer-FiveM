@@ -10,9 +10,13 @@ local skinData = {
 	-- daytime textures this:
 	-- "needle_day", "tachometer_day", "speedometer_day", "fuelgauge_day"
 	-- these names are hardcoded
-centerCoords = {0.8,0.8},
+
+	-- where the speedo gets centered, values below are OFFSETS from this.
+	centerCoords = {0.8,0.8},
+
+
 	-- icon locations
-											-- these are xy,width,height
+	-- these are xy,width,height
 	lightsLoc = {0.010,0.092,0.018,0.02},
 	blinkerLoc = {0.105,0.034,0.022,0.03},
 	fuelLoc = {0.105,0.090,0.012,0.025},

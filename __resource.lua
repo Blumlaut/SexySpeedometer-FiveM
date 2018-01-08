@@ -16,4 +16,5 @@ exports {
 	"addSkin",
 	"toggleSpeedo",
 	"getCurrentSkin",
+	"addSkin",
 }

@@ -22,6 +22,8 @@ function changeSkin(skin)
 			cst = theSkin
 			currentSkin = theSkin.skinName
 			SetResourceKvp("sexyspeedo_skin", skin)
+			showFuelGauge = true
+			overwriteAlpha = false
 			return true
 		end
 	end
@@ -67,18 +69,31 @@ RegisterCommand("speedoskin", function(source, args, rawCommand)
 	end
 end, false)
 
+RegisterCommand("speedoskins", function(source, args, rawCommand)
+	local s = getAvailableSkins()
+	local ss = ""
+	for i,s in pairs(s) do
+		ss = ss..""..s..", "
+	end
+	TriggerEvent("chat:addMessage", { args = { "Available Skins", ss } })
+end, false)
+
 RegisterCommand("togglespeedo", function(source, args, rawCommand)
 	toggleSpeedo()
 end, false)
+
 
 
 curNeedle, curTachometer, curSpeedometer, curFuelGauge, curAlpha = "needle_day", "tachometer_day", "speedometer_day", "fuelgauge_day",0
 RPM, degree, blinkertick, showBlinker = 0, 0, 0, false
 overwriteChecks = false -- debug value to display all icons
 Citizen.CreateThread(function()
+	TriggerEvent('chat:addSuggestion', '/togglespeedo', 'show/hide speedometer' )
+	TriggerEvent('chat:addSuggestion', '/speedoskins', 'show all available speedometer skins' )
+	TriggerEvent('chat:addSuggestion', '/speedoskin', 'change the speedometer skin', { {name='skin', help="the skin name"} } )
 	while true do
 		Citizen.Wait(0)
-		local veh = GetVehiclePedIsUsing(GetPlayerPed(-1))
+		veh = GetVehiclePedIsUsing(GetPlayerPed(-1))
 		if overwriteAlpha then curAlpha = 0 end
 		if not overwriteAlpha then
 			if IsPedInAnyVehicle(GetPlayerPed(-1),true) and GetSeatPedIsTryingToEnter(GetPlayerPed(-1)) == -1 or GetPedInVehicleSeat(veh, -1) == GetPlayerPed(-1) then
@@ -200,7 +215,7 @@ Citizen.CreateThread(function()
 			DrawSprite(cst.ytdName, curSpeedometer, cst.centerCoords[1]+cst.SpeedoBGLoc[1],cst.centerCoords[2]+cst.SpeedoBGLoc[2],cst.SpeedoBGLoc[3],cst.SpeedoBGLoc[4], 0.0, 255, 255, 255, curAlpha)
 			if MaxFuelLevel ~= 0 then
 				DrawSprite(cst.ytdName, curTachometer, cst.centerCoords[1]+cst.TachoBGloc[1],cst.centerCoords[2]+cst.TachoBGloc[2],cst.TachoBGloc[3],cst.TachoBGloc[4], 0.0, 255, 255, 255, curAlpha)
-				DrawSprite(cst.ytdName, curNeedle, cst.centerCoords[1]+cst.TachoNeedleLoc[1],cst.centerCoords[2]+cst.TachoNeedleLoc[2],cst.TachoNeedleLoc[3],cst.TachoNeedleLoc[4],RPM*280-30, 255, 255, 255, curAlpha)
+				DrawSprite(cst.ytdName, curNeedle, cst.centerCoords[1]+cst.TachoNeedleLoc[1],cst.centerCoords[2]+cst.TachoNeedleLoc[2],cst.TachoNeedleLoc[3],cst.TachoNeedleLoc[4],RPM*(cst.rpmScale)-(cst.rpmScaleDecrease or 0), 255, 255, 255, curAlpha)
 			end
 			DrawSprite(cst.ytdName, curNeedle, cst.centerCoords[1]+cst.SpeedoNeedleLoc[1],cst.centerCoords[2]+cst.SpeedoNeedleLoc[2],cst.SpeedoNeedleLoc[3],cst.SpeedoNeedleLoc[4],-5.00001+degree, 255, 255, 255, curAlpha)
 			if showFuelGauge and FuelLevel and MaxFuelLevel ~= 0 then

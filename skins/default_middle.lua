@@ -30,7 +30,11 @@ centerCoords = {0.45,0.85},
 	FuelGaugeLoc = {0.060,0.000,0.040,0.08},
 
 	RotMult = 2.036936,
-	RotStep = 2.32833
+	RotStep = 2.32833,
+
+	-- rpm scale, defines how "far" the rpm gauge goes before hitting redline
+	rpmScale = 250,
+	rpmScaleDecrease = 30, -- how much we want to decrease the rpm end result, this gives lower idle
 
 }
 

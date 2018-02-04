@@ -16,6 +16,10 @@ function getAvailableSkins()
 	return tt
 end
 
+function toggleFuelGauge(toggle)
+	showFuelGauge = toggle
+end
+
 function changeSkin(skin)
 	for i,theSkin in pairs(skins) do
 		if theSkin.skinName == skin then

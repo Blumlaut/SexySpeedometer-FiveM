@@ -17,4 +17,5 @@ exports {
 	"toggleSpeedo",
 	"getCurrentSkin",
 	"addSkin",
+	"toggleFuelGauge",
 }

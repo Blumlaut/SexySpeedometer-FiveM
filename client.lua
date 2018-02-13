@@ -34,6 +34,15 @@ function changeSkin(skin)
 	return false
 end
 
+function DoesSkinExist(skinName)
+	for i,theSkin in pairs(getAvailableSkins()) do
+		if theSkin == skinName then
+			return true
+		end
+	end
+	return false
+end
+
 function getCurrentSkin()
 	return currentSkin
 end
@@ -52,15 +61,20 @@ Citizen.CreateThread(function()
 	currentSkin = GetResourceKvpString("sexyspeedo_skin")
 	if not currentSkin or currentSkin == "default" then
 		SetResourceKvp("sexyspeedo_skin", "default")
-		currentSkin = "default"
-		changeSkin("default")
+		if DoesSkinExist("default") then
+			currentSkin = "default"
+			changeSkin("default")
+		else
+			currentSkin = skins[1].skinName
+			changeSkin(skins[1].skinName)
+		end
 	else
 		for i,theSkin in pairs(skins) do
 			if theSkin.skinName == currentSkin then
 				cst = theSkin
 			end
 		end
-		if not cst then changeSkin("default") end
+		if not cst then changeSkin(skins[1].skinName) end
 	end
 end)
 

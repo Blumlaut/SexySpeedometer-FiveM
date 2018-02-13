@@ -18,4 +18,5 @@ exports {
 	"getCurrentSkin",
 	"addSkin",
 	"toggleFuelGauge",
+	"DoesSkinExist",
 }

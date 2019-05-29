@@ -102,11 +102,13 @@ end, false)
 
 
 Citizen.CreateThread(function()
+	PlayerPed = PlayerPedId()
 	while true do
 		Citizen.Wait(300)
-		inVehicleAtGetin = IsPedInAnyVehicle(PlayerPedId(), true)
-		inVehicle = IsPedInAnyVehicle(PlayerPedId(), false)
-		veh = GetVehiclePedIsUsing(PlayerPedId())
+		PlayerPed = PlayerPedId()
+		inVehicleAtGetin = IsPedInAnyVehicle(PlayerPed, true)
+		inVehicle = IsPedInAnyVehicle(PlayerPed, false)
+		veh = GetVehiclePedIsUsing(PlayerPed)
 		DoesCurrentVehExist = (DoesEntityExist(veh) and not IsEntityDead(veh))
 		if DoesCurrentVehExist then 
 			vehclass = GetVehicleClass(veh)
@@ -147,7 +149,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 		if overwriteAlpha then curAlpha = 0 end
 		if not overwriteAlpha then
-			if inVehicleAtGetin and GetSeatPedIsTryingToEnter(GetPlayerPed(-1)) == -1 or GetPedInVehicleSeat(veh, -1) == PlayerPedId() then
+			if inVehicleAtGetin and GetSeatPedIsTryingToEnter(GetPlayerPed(-1)) == -1 or GetPedInVehicleSeat(veh, -1) == PlayerPed then
 					if curAlpha >= 255 then
 						curAlpha = 255
 					else

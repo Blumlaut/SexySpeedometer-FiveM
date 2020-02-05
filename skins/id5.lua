@@ -28,6 +28,7 @@ local skinData = {
 	TachoBGloc = {0.110,0.004,0.125,0.17},
 	TachoNeedleLoc = {0.110,0.030,0.09,0.17},
 
+	ShowFuel = false,
 	FuelBGLoc = {-0.035, -0.030,0.050, 0.040},
 	FuelGaugeLoc = {0.060,0.000,0.030,0.080},
 

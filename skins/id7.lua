@@ -27,15 +27,23 @@ local skinData = {
 	TachoBGloc = {0.108,0.009,0.135,0.235},
 	TachoNeedleLoc = {0.108,0.009,0.135,0.215},
 
+	enableGear = true, -- REQUIRES "gear_1"-9 textures!!
+	GearLoc = {0.115,0.043,0.025,0.055}, -- gear location
+
+
+	enableDigits = true, -- REQUIRES "speed_digits_1"-9 textures!!
+	Speed1Loc = {0.090,-0.020,0.022,0.05}, -- 3rd digit
+	Speed2Loc = {0.106,-0.020,0.022,0.05}, -- 2nd digit
+	Speed3Loc = {0.126,-0.020,0.022,0.05}, -- 1st digit
+	useKPH=true,
+
+	ShowFuel = false,
 	FuelBGLoc = {0.085, 0.020,0.030, 0.020},
 	FuelGaugeLoc = {0.060,0.000,0.030,0.080},
 
 
 	-- you can also add your own values and use them in the code below, the sky is the limit!
-	GearLoc = {0.115,0.043,0.025,0.055}, -- gear location
-	Speed1Loc = {0.090,-0.020,0.022,0.05}, -- 3rd digit
-	Speed2Loc = {0.106,-0.020,0.022,0.05}, -- 2nd digit
-	Speed3Loc = {0.126,-0.020,0.022,0.05}, -- 1st digit
+
 	UnitLoc = {0.145,-0.000,0.020,0.020},
 	RevLight = {0.1054,-0.005,0.138,0.230},
 
@@ -140,12 +148,13 @@ Citizen.CreateThread(function()
 				end
 
 				_,lightson,highbeams = GetVehicleLightsState(veh)
+				local curTachometer=""
 				if lightson == 1 or highbeams == 1 then
 					curTachometer = "night_labels_"..labelType
 				else
 					curTachometer = "labels_"..labelType
 				end
-				curSpeedometer = "nodrift_background"
+				local curSpeedometer = "nodrift_background"
 
 				local gear = GetVehicleCurrentGear(veh)+1
 
@@ -155,9 +164,11 @@ Citizen.CreateThread(function()
 				if RPM > 0.90 then
 					DrawSprite(cst.ytdName, "rev_light", cst.centerCoords[1]+cst.RevLight[1],cst.centerCoords[2]+cst.RevLight[2],cst.RevLight[3],cst.RevLight[4], 0.0, 255, 255, 255, curAlpha)
 				end
-				DrawSprite(cst.ytdName, curSpeedometer, cst.centerCoords[1]+cst.SpeedoBGLoc[1],cst.centerCoords[2]+cst.SpeedoBGLoc[2],cst.SpeedoBGLoc[3],cst.SpeedoBGLoc[4], 0.0, 255, 255, 255, curAlpha)
-				DrawSprite(cst.ytdName, curTachometer, cst.centerCoords[1]+cst.TachoBGloc[1],cst.centerCoords[2]+cst.TachoBGloc[2],cst.TachoBGloc[3],cst.TachoBGloc[4], 0.0, 255, 255, 255, curAlpha)
-				DrawSprite(cst.ytdName, "gear_"..gear, cst.centerCoords[1]+cst.GearLoc[1],cst.centerCoords[2]+cst.GearLoc[2],cst.GearLoc[3],cst.GearLoc[4], 0.0, 255, 255, 255, curAlpha)
+				--DrawSprite(cst.ytdName, curSpeedometer, cst.centerCoords[1]+cst.SpeedoBGLoc[1],cst.centerCoords[2]+cst.SpeedoBGLoc[2],cst.SpeedoBGLoc[3],cst.SpeedoBGLoc[4], 0.0, 255, 255, 255, curAlpha)
+				--DrawSprite(cst.ytdName, curTachometer, cst.centerCoords[1]+cst.TachoBGloc[1],cst.centerCoords[2]+cst.TachoBGloc[2],cst.TachoBGloc[3],cst.TachoBGloc[4], 0.0, 255, 255, 255, curAlpha)
+				SetOverriddenTexture("tachometerbg", curTachometer)
+				SetOverriddenTexture("speedometerbg", curSpeedometer)
+				--DrawSprite(cst.ytdName, "gear_"..gear, cst.centerCoords[1]+cst.GearLoc[1],cst.centerCoords[2]+cst.GearLoc[2],cst.GearLoc[3],cst.GearLoc[4], 0.0, 255, 255, 255, curAlpha)
 				local speed = GetEntitySpeed(veh)
 
 				if useKPH then
@@ -178,6 +189,7 @@ Citizen.CreateThread(function()
 				for i = 1, string.len(speed) do
 					speedTable[i] = speed:sub(i, i)
 				end
+				--[[
 				if string.len(speed) == 1 then
 					DrawSprite(cst.ytdName, "speed_digits_"..speedTable[1], cst.centerCoords[1]+cst.Speed3Loc[1],cst.centerCoords[2]+cst.Speed3Loc[2],cst.Speed3Loc[3],cst.Speed3Loc[4], 0.0, 255, 255, 255, curAlpha)
 				elseif string.len(speed) == 2 then
@@ -192,6 +204,7 @@ Citizen.CreateThread(function()
 					DrawSprite(cst.ytdName, "speed_digits_9", cst.centerCoords[1]+cst.Speed2Loc[1],cst.centerCoords[2]+cst.Speed2Loc[2],cst.Speed2Loc[3],cst.Speed2Loc[4], 0.0, 255, 255, 255, curAlpha)
 					DrawSprite(cst.ytdName, "speed_digits_9", cst.centerCoords[1]+cst.Speed1Loc[1],cst.centerCoords[2]+cst.Speed1Loc[2],cst.Speed1Loc[3],cst.Speed1Loc[4], 0.0, 255, 255, 255, curAlpha)
 				end
+				--]]
 				if GetPedInVehicleSeat(veh, -1) == GetPlayerPed(-1) and GetVehicleClass(veh) >= 0 and GetVehicleClass(veh) < 13 or GetVehicleClass(veh) >= 17 then
 					if angle(veh) >= 10 and angle(veh) <= 18 and GetEntityHeightAboveGround(veh) <= 1.5 then
 						driftSprite = "drift_blue"

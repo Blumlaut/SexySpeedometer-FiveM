@@ -28,11 +28,15 @@ local skinData = {
 	TachoBGloc = {0.110,0.004,0.125,0.17},
 	TachoNeedleLoc = {0.110,0.030,0.09,0.17},
 
+
+
+
 	ShowFuel = false,
 	FuelBGLoc = {-0.035, -0.030,0.050, 0.040},
 	FuelGaugeLoc = {0.060,0.000,0.030,0.080},
 
-
+	enableDigits = true, -- REQUIRES "speed_digits_1"-9 textures!!
+	enableGear = true,
 	-- you can also add your own values and use them in the code below, the sky is the limit!
 	GearLoc = {0.010,-0.033,0.025,0.055}, -- gear location
 	Speed1Loc = {-0.024,0.042,0.025,0.06}, -- 3rd digit
@@ -177,17 +181,19 @@ Citizen.CreateThread(function()
 					end
 					curTurboNeedle = "needle_day"
 				end
-				curSpeedometer = "nodrift_background"
+				local curSpeedometer = "nodrift_background"
 
 				local gear = GetVehicleCurrentGear(veh)+1
 
 				if not gear then gear = 1 end
 				if gear == 1 then gear = 0 end
 
+				SetOverriddenTexture("tachometerbg", curTachometer)
+				SetOverriddenTexture("speedometerbg", curSpeedometer)
 
-				DrawSprite(skinData.ytdName, curSpeedometer, skinData.centerCoords[1]+skinData.SpeedoBGLoc[1],skinData.centerCoords[2]+skinData.SpeedoBGLoc[2],skinData.SpeedoBGLoc[3],skinData.SpeedoBGLoc[4], 0.0, 255, 255, 255, curAlpha)
-				DrawSprite(skinData.ytdName, curTachometer, skinData.centerCoords[1]+skinData.TachoBGloc[1],skinData.centerCoords[2]+skinData.TachoBGloc[2],skinData.TachoBGloc[3],skinData.TachoBGloc[4], 0.0, 255, 255, 255, curAlpha)
-				DrawSprite(skinData.ytdName, "gear_"..gear, skinData.centerCoords[1]+skinData.GearLoc[1],skinData.centerCoords[2]+skinData.GearLoc[2],skinData.GearLoc[3],skinData.GearLoc[4], 0.0, 255, 255, 255, curAlpha)
+				--DrawSprite(skinData.ytdName, curSpeedometer, skinData.centerCoords[1]+skinData.SpeedoBGLoc[1],skinData.centerCoords[2]+skinData.SpeedoBGLoc[2],skinData.SpeedoBGLoc[3],skinData.SpeedoBGLoc[4], 0.0, 255, 255, 255, curAlpha)
+				--DrawSprite(skinData.ytdName, curTachometer, skinData.centerCoords[1]+skinData.TachoBGloc[1],skinData.centerCoords[2]+skinData.TachoBGloc[2],skinData.TachoBGloc[3],skinData.TachoBGloc[4], 0.0, 255, 255, 255, curAlpha)
+				--DrawSprite(skinData.ytdName, "gear_"..gear, skinData.centerCoords[1]+skinData.GearLoc[1],skinData.centerCoords[2]+skinData.GearLoc[2],skinData.GearLoc[3],skinData.GearLoc[4], 0.0, 255, 255, 255, curAlpha)
 
 				local speed = GetEntitySpeed(veh)
 
@@ -204,6 +210,7 @@ Citizen.CreateThread(function()
 				end
 
 				if not speed then speed = "0.0" end
+				--[[
 				speed = tonumber(string.format("%." .. (0) .. "f", speed))
 				speed = tostring(speed)
 				for i = 1, string.len(speed) do
@@ -223,6 +230,7 @@ Citizen.CreateThread(function()
 					DrawSprite(skinData.ytdName, "speed_digits_9", skinData.centerCoords[1]+skinData.Speed2Loc[1],skinData.centerCoords[2]+skinData.Speed2Loc[2],skinData.Speed2Loc[3],skinData.Speed2Loc[4], 0.0, 255, 255, 255, curAlpha)
 					DrawSprite(skinData.ytdName, "speed_digits_9", skinData.centerCoords[1]+skinData.Speed1Loc[1],skinData.centerCoords[2]+skinData.Speed1Loc[2],skinData.Speed1Loc[3],skinData.Speed1Loc[4], 0.0, 255, 255, 255, curAlpha)
 				end
+				]]
 				local boost = GetVehicleTurboPressure(veh) 
 				if boost > 0.0 then
 

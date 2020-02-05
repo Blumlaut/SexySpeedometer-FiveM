@@ -22,6 +22,7 @@ exports {
 	"addSkin",
 	"toggleFuelGauge",
 	"DoesSkinExist",
+	"SetOverriddenTexture",
 }
 
 ui_page('skins/initiald.html')

@@ -4,12 +4,25 @@ local skinData = {
 	-- names
 	skinName = "default", -- the name that is display ingame/in sexyspeedo, make sure its lowercase+no spaces
 	ytdName = "default", -- the name of the texture dictionary
-	-- texture dictionary informations:
-	-- night textures are supposed to look like this:
-	-- "needle", "tachometer", "speedometer", "fuelgauge"
-	-- daytime textures this:
-	-- "needle_day", "tachometer_day", "speedometer_day", "fuelgauge_day"
-	-- these names are hardcoded
+	--[[ 
+	texture dictionary informations:
+	night textures are supposed to look like this:
+	"needle", "tachometer", "speedometer", "fuelgauge"
+	daytime textures this:
+	"needle_day", "tachometer_day", "speedometer_day", "fuelgauge_day"
+	further textures:
+	
+	BeamLight
+	BlinkerLight
+	FuelLight
+	OilLight
+	EngineLight
+	FuelNeedle
+	SpeedometerBG
+	TachometerBG
+	Needle
+	FuelGauge
+	--]]
 
 	-- where the speedo gets centered, values below are OFFSETS from this.
 	centerCoords = {0.8,0.8},

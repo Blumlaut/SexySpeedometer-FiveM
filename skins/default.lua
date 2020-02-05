@@ -2,8 +2,8 @@
 
 local skinData = {
 	-- names
-	skinName = "default",
-	ytdName = "default",
+	skinName = "default", -- the name that is display ingame/in sexyspeedo, make sure its lowercase+no spaces
+	ytdName = "default", -- the name of the texture dictionary
 	-- texture dictionary informations:
 	-- night textures are supposed to look like this:
 	-- "needle", "tachometer", "speedometer", "fuelgauge"
@@ -33,12 +33,13 @@ local skinData = {
 	FuelBGLoc = {0.060, -0.020,0.04, 0.04},
 	FuelGaugeLoc = {0.060,0.000,0.040,0.08},
 
-	RotMult = 2.036936,
-	RotStep = 2.32833,
+	-- here is where it gets complicated, this is the Rotation "Multiplier" and "Step"
+	RotMult = 2.036936, -- unused currently.
+	RotStep = 2.32833, -- step is calculated like the following: Speed Rotation Degree=(GetEntitySpeed(veh)*2.036936)*RotStep
 
 	-- rpm scale, defines how "far" the rpm gauge goes before hitting redline
-	rpmScale = 270,
-	rpmScaleDecrease = 30, -- how much we want to decrease the rpm end result, this gives lower idle
+	rpmScale = 270, -- scale defines how far the needle goes
+	rpmScaleDecrease = 30, -- how much we want to decrease the rpm end result, this gives lower idle, make sure to adjust scale accordingly.
 
 }
 

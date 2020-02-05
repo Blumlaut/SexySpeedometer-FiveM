@@ -41,10 +41,9 @@ local skinData = {
 	TachoBGloc = {0.120,0.060,0.12,0.185},
 	TachoNeedleLoc = {0.120,0.062,0.076,0.15},
 
-	enableGear = true, -- REQUIRES "gear_1"-9 textures!!
-	enableDigits = true, -- REQUIRES "speed_digits_1"-9 textures!!
-
-	Speed0Loc = {0.074,-0.020,0.022,0.05}, -- 4th digit
+	enableGear = false, -- REQUIRES "gear_1"-9 textures!!
+	enableDigits = false, -- REQUIRES "speed_digits_1"-9 textures!!
+	
 	Speed1Loc = {0.090,-0.020,0.022,0.05}, -- 3rd digit
 	Speed2Loc = {0.106,-0.020,0.022,0.05}, -- 2nd digit
 	Speed3Loc = {0.126,-0.020,0.022,0.05}, -- 1st digit

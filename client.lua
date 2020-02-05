@@ -124,9 +124,6 @@ Citizen.CreateThread(function()
 	PlayerPed = PlayerPedId()
 	while true do
 		Citizen.Wait(300)
-		for i, val in pairs(OverriddenTextures) do
-			print(i,val)
-		end
 		PlayerPed = PlayerPedId()
 		inVehicleAtGetin = IsPedInAnyVehicle(PlayerPed, true)
 		inVehicle = IsPedInAnyVehicle(PlayerPed, false)

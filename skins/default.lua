@@ -43,7 +43,7 @@ local skinData = {
 
 	enableGear = false, -- REQUIRES "gear_1"-9 textures!!
 	enableDigits = false, -- REQUIRES "speed_digits_1"-9 textures!!
-	
+	useKPH=true, -- if we use KPH or MPH for digital speed
 	Speed1Loc = {0.090,-0.020,0.022,0.05}, -- 3rd digit
 	Speed2Loc = {0.106,-0.020,0.022,0.05}, -- 2nd digit
 	Speed3Loc = {0.126,-0.020,0.022,0.05}, -- 1st digit

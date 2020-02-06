@@ -29,6 +29,7 @@ local skinData = {
 	enableDigits = true, -- REQUIRES "speed_digits_1"-9 textures!!
 	enableGear = true,
 	ShowFuel = false,
+	useKPH=true,
 	FuelBGLoc = {-0.035, -0.030,0.050, 0.040},
 	FuelGaugeLoc = {0.060,0.000,0.030,0.080},
 

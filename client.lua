@@ -291,7 +291,7 @@ Citizen.CreateThread(function()
 			if (cst.enableDigits) then
 				local speed = GetEntitySpeed(veh)
 
-				if cst.useKPH then
+				if cst.useKPH == true or cst.useKPH == nil then
 					speed = speed* 3.6
 				else
 					speed = speed*2.236936

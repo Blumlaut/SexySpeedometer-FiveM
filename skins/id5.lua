@@ -37,6 +37,7 @@ local skinData = {
 
 	enableDigits = true, -- REQUIRES "speed_digits_1"-9 textures!!
 	enableGear = true,
+	useKPH=true,
 	-- you can also add your own values and use them in the code below, the sky is the limit!
 	GearLoc = {0.010,-0.033,0.025,0.055}, -- gear location
 	Speed1Loc = {-0.024,0.042,0.025,0.06}, -- 3rd digit

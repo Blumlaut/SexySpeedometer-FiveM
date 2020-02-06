@@ -1,4 +1,6 @@
-resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
+fx_version 'adamant'
+
+game 'gta5'
 
 client_scripts {
 	"client.lua",
@@ -9,8 +11,6 @@ client_scripts {
 	"skins/id5.lua",
 	"skins/id6.lua",
 	"skins/id7.lua",
-
-
 }
 
 exports {

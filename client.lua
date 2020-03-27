@@ -134,7 +134,6 @@ Citizen.CreateThread(function()
 			engineHealth = GetVehicleEngineHealth(veh)
 			OilLevel = GetVehicleOilLevel(veh)
 			FuelLevel = GetVehicleFuelLevel(veh)
-			gear = GetVehicleCurrentGear(veh)+1
 			_,lightson,highbeams = GetVehicleLightsState(veh)
 			MaxFuelLevel = Citizen.InvokeNative(0x642FC12F, veh, "CHandlingData", "fPetrolTankVolume", Citizen.ReturnResultAnyway(), Citizen.ResultAsFloat())
 		end
@@ -146,6 +145,7 @@ Citizen.CreateThread(function()
 		degree, step = 0, cst.RotStep
 		if DoesCurrentVehExist then 
 			RPM = GetVehicleCurrentRpm(veh)
+			gear = GetVehicleCurrentGear(veh)+1
 			if not GetIsVehicleEngineRunning(veh) then RPM = 0 end -- fix for R*'s Engine RPM fuckery
 			if RPM > 0.99 then
 				RPM = RPM*100

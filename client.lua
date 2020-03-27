@@ -134,6 +134,7 @@ Citizen.CreateThread(function()
 			engineHealth = GetVehicleEngineHealth(veh)
 			OilLevel = GetVehicleOilLevel(veh)
 			FuelLevel = GetVehicleFuelLevel(veh)
+			gear = GetVehicleCurrentGear(veh)+1
 			_,lightson,highbeams = GetVehicleLightsState(veh)
 			MaxFuelLevel = Citizen.InvokeNative(0x642FC12F, veh, "CHandlingData", "fPetrolTankVolume", Citizen.ReturnResultAnyway(), Citizen.ResultAsFloat())
 		end
@@ -281,7 +282,6 @@ Citizen.CreateThread(function()
 				DrawSprite(cst.ytdName, OverriddenTextures["fuelneedle"] or cst.FuelNeedle or curNeedle, cst.centerCoords[1]+cst.FuelGaugeLoc[1],cst.centerCoords[2]+cst.FuelGaugeLoc[2],cst.FuelGaugeLoc[3],cst.FuelGaugeLoc[4],80.0+FuelLevel/MaxFuelLevel*110, 255, 255, 255, curAlpha)
 			end
 			if (cst.enableGear) then
-				local gear = GetVehicleCurrentGear(veh)+1
 
 				if not gear then gear = 1 end
 				if gear == 1 then gear = 0 end

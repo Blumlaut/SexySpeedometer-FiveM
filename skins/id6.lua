@@ -60,6 +60,38 @@ end)
 
 -- addon code
 
+local turboPressure = 0.0
+local turboLastRPM = 0
+local function SimulateVehicleTurboPressure(veh)
+	if not IsToggleModOn(veh,18) then return 0 end
+	local rpm = GetVehicleCurrentRpm(veh)
+	local logRPM = -math.log(rpm)
+	if turboLastRPM == 0 then
+		turboLastRPM = rpm
+	elseif turboLastRPM > rpm then
+		if turboPressure >=0.01 then
+			turboPressure=turboPressure-(turboLastRPM-rpm)
+		end
+	else
+
+		if IsControlPressed(0, 71) then
+			if turboPressure <= 1.0 then
+				turboPressure = turboPressure+(rpm/90)
+			end
+		else
+			if turboPressure >=0.01 then
+				turboPressure = turboPressure-(logRPM/10)
+			end
+		end
+		if turboPressure < -0.01 then
+			turboPressure=turboPressure+0.01
+		end
+	end
+	turboLastRPM = rpm
+	return turboPressure
+end
+
+
 local idcars = {"FUTO", "AE86", "86", "BLISTA2"} -- cars that use the AE86 speed chime and ae86 RPM background
 local labelType = "8k"
 local curDriftAlpha = 0
@@ -230,7 +262,7 @@ Citizen.CreateThread(function()
 					DrawSprite(skinData.ytdName, "speed_digits_9", skinData.centerCoords[1]+skinData.Speed1Loc[1],skinData.centerCoords[2]+skinData.Speed1Loc[2],skinData.Speed1Loc[3],skinData.Speed1Loc[4], 0.0, 255, 255, 255, curAlpha)
 				end
 				]]
-				local boost = GetVehicleTurboPressure(veh)
+				local boost = SimulateVehicleTurboPressure(veh)
 				if boost > 0.0 then
 
 				else
@@ -238,7 +270,7 @@ Citizen.CreateThread(function()
 				end
 				if IsToggleModOn(veh,18) then
 					DrawSprite(skinData.ytdName, curTurbo, skinData.centerCoords[1]+skinData.TurboBGLoc[1],skinData.centerCoords[2]+skinData.TurboBGLoc[2],skinData.TurboBGLoc[3],skinData.TurboBGLoc[4], 0.0, 255, 255, 255, curAlpha)
-					DrawSprite(skinData.ytdName, curTurboNeedle, skinData.centerCoords[1]+skinData.TurboGaugeLoc[1],skinData.centerCoords[2]+skinData.TurboGaugeLoc[2],skinData.TurboGaugeLoc[3],skinData.TurboGaugeLoc[4], (GetVehicleTurboPressure(veh)*100)-625, 255, 255, 255, curAlpha)
+					DrawSprite(skinData.ytdName, curTurboNeedle, skinData.centerCoords[1]+skinData.TurboGaugeLoc[1],skinData.centerCoords[2]+skinData.TurboGaugeLoc[2],skinData.TurboGaugeLoc[3],skinData.TurboGaugeLoc[4], (boost*135)-678, 255, 255, 255, curAlpha)
 				end
 				if GetPedInVehicleSeat(veh, -1) == GetPlayerPed(-1) and GetVehicleClass(veh) >= 0 and GetVehicleClass(veh) < 13 or GetVehicleClass(veh) >= 17 then
 					if angle(veh) >= 10 and angle(veh) <= 18 and GetEntityHeightAboveGround(veh) <= 1.5 then

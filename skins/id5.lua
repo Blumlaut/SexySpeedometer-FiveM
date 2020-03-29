@@ -46,7 +46,6 @@ local skinData = {
 	UnitLoc = {0.029,0.088,0.025,0.025},
 	TurboBGLoc = {0.053, -0.130, 0.075,0.105},
 	TurboGaugeLoc = {0.0533, -0.125, 0.045,0.075},
-
 	RotMult = 2.036936,
 	RotStep = 2.32833,
 
@@ -58,6 +57,25 @@ local skinData = {
 Citizen.CreateThread(function()
 	addSkin(skinData)
 end)
+
+local turboPressure = 0.0
+local function SimulateVehicleTurboPressure(veh)
+	if not IsToggleModOn(veh,18) then return 0 end
+
+	if IsControlPressed(0, 71) then
+		if turboPressure <= 1.0 then
+			turboPressure = turboPressure+(GetVehicleCurrentRpm(veh)/110)
+		end
+	else
+		if turboPressure >=0.01 then
+			turboPressure = turboPressure-(GetVehicleCurrentRpm(veh)/75)
+		end
+	end
+	if turboPressure < -0.01 then
+		turboPressure=turboPressure+0.01
+	end
+	return turboPressure
+end
 
 
 -- addon code
@@ -232,7 +250,7 @@ Citizen.CreateThread(function()
 					DrawSprite(skinData.ytdName, "speed_digits_9", skinData.centerCoords[1]+skinData.Speed1Loc[1],skinData.centerCoords[2]+skinData.Speed1Loc[2],skinData.Speed1Loc[3],skinData.Speed1Loc[4], 0.0, 255, 255, 255, curAlpha)
 				end
 				]]
-				local boost = GetVehicleTurboPressure(veh) 
+				local boost = SimulateVehicleTurboPressure(veh) 
 				if boost > 0.0 then
 
 				else
@@ -240,7 +258,7 @@ Citizen.CreateThread(function()
 				end
 				if IsToggleModOn(veh,18) then
 					DrawSprite(skinData.ytdName, curTurbo, skinData.centerCoords[1]+skinData.TurboBGLoc[1],skinData.centerCoords[2]+skinData.TurboBGLoc[2],skinData.TurboBGLoc[3],skinData.TurboBGLoc[4], 0.0, 255, 255, 255, curAlpha)
-					DrawSprite(skinData.ytdName, curTurboNeedle, skinData.centerCoords[1]+skinData.TurboGaugeLoc[1],skinData.centerCoords[2]+skinData.TurboGaugeLoc[2],skinData.TurboGaugeLoc[3],skinData.TurboGaugeLoc[4], (GetVehicleTurboPressure(veh)*100)-625, 255, 255, 255, curAlpha)
+					DrawSprite(skinData.ytdName, curTurboNeedle, skinData.centerCoords[1]+skinData.TurboGaugeLoc[1],skinData.centerCoords[2]+skinData.TurboGaugeLoc[2],skinData.TurboGaugeLoc[3],skinData.TurboGaugeLoc[4], (boost*135)-678, 255, 255, 255, curAlpha)
 				end
 				if GetPedInVehicleSeat(veh, -1) == GetPlayerPed(-1) and GetVehicleClass(veh) >= 0 and GetVehicleClass(veh) < 13 or GetVehicleClass(veh) >= 17 then
 					if angle(veh) >= 10 and angle(veh) <= 18 and GetEntityHeightAboveGround(veh) <= 1.5 then

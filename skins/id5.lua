@@ -1,11 +1,10 @@
-
 local skinData = {
 	-- names
 	skinName = "id5",
 	ytdName = "id5",
 	-- texture dictionary informations:
 	-- night textures are supposed to look like this:
-	-- "needle", "tachometer", skinData.ytdName, "fuelgauge"
+	-- "needle", "tachometer", cst.ytdName, "fuelgauge"
 	-- daytime textures this:
 	-- "needle_day", "tachometer_day", "speedometer_day", "fuelgauge_day"
 	-- these names are hardcoded
@@ -22,30 +21,26 @@ local skinData = {
 	engineLoc = {0.130,0.12,0.020,0.025},
 
 	-- gauge locations
-	SpeedoBGLoc = {0.053, 0.020, 0.25,0.23},
-	SpeedoNeedleLoc = {0.000,5,0.076,0.15},
+	SpeedoBGLoc = {0.0625, 0.019, 0.238,0.238},
+	SpeedoNeedleLoc = {0.0,5,0.076,0.15},
 
 	TachoBGloc = {0.110,0.004,0.125,0.17},
 	TachoNeedleLoc = {0.110,0.030,0.09,0.17},
 
-
-
-
-	ShowFuel = false,
-	FuelBGLoc = {-0.035, -0.030,0.050, 0.040},
+	FuelBGLoc = {0.110, 0.093,0.050, 0.040},
 	FuelGaugeLoc = {0.060,0.000,0.030,0.080},
-
-	enableDigits = true, -- REQUIRES "speed_digits_1"-9 textures!!
+	enableDigits = true,
 	enableGear = true,
-	useKPH=true,
+
 	-- you can also add your own values and use them in the code below, the sky is the limit!
-	GearLoc = {0.010,-0.033,0.025,0.055}, -- gear location
-	Speed1Loc = {-0.024,0.042,0.025,0.06}, -- 3rd digit
-	Speed2Loc = {-0.004,0.042,0.025,0.06}, -- 2nd digit
-	Speed3Loc = {0.020,0.042,0.025,0.06}, -- 1st digit
-	UnitLoc = {0.029,0.088,0.025,0.025},
-	TurboBGLoc = {0.053, -0.130, 0.075,0.105},
-	TurboGaugeLoc = {0.0533, -0.125, 0.045,0.075},
+	GearLoc = {0.003,-0.033,0.030,0.055}, -- gear location
+	Speed1Loc = {-0.038,0.042,0.030,0.055}, -- 3rd digit
+	Speed2Loc = {-0.010,0.042,0.030,0.055}, -- 2nd digit
+	Speed3Loc = {0.018,0.042,0.030,0.055}, -- 1st digit
+	UnitLoc = {0.018,0.085,0.033,0.023},
+	TurboBGLoc = {0.053, -0.130, 0.075,0.100},
+	TurboGaugeLoc = {0.0533, -0.125, 0.045,0.060},
+
 	RotMult = 2.036936,
 	RotStep = 2.32833,
 
@@ -58,27 +53,39 @@ Citizen.CreateThread(function()
 	addSkin(skinData)
 end)
 
+-- addon code
+
 local turboPressure = 0.0
+local turboLastRPM = 0
 local function SimulateVehicleTurboPressure(veh)
 	if not IsToggleModOn(veh,18) then return 0 end
-
-	if IsControlPressed(0, 71) then
-		if turboPressure <= 1.0 then
-			turboPressure = turboPressure+(GetVehicleCurrentRpm(veh)/110)
+	local rpm = GetVehicleCurrentRpm(veh)
+	local logRPM = -math.log(rpm)
+	if turboLastRPM == 0 then
+		turboLastRPM = rpm
+	elseif turboLastRPM > rpm then
+		if turboPressure >=0.01 then
+			turboPressure=turboPressure-(turboLastRPM-rpm)
 		end
 	else
-		if turboPressure >=0.01 then
-			turboPressure = turboPressure-(GetVehicleCurrentRpm(veh)/75)
+
+		if IsControlPressed(0, 71) then
+			if turboPressure <= 1.0 then
+				turboPressure = turboPressure+(rpm/90)
+			end
+		else
+			if turboPressure >=0.01 then
+				turboPressure = turboPressure-(logRPM/10)
+			end
+		end
+		if turboPressure < -0.01 then
+			turboPressure=turboPressure+0.01
 		end
 	end
-	if turboPressure < -0.01 then
-		turboPressure=turboPressure+0.01
-	end
+	turboLastRPM = rpm
 	return turboPressure
 end
 
-
--- addon code
 
 local idcars = {"FUTO", "AE86", "86", "BLISTA2"} -- cars that use the AE86 speed chime and ae86 RPM background
 local labelType = "8k"

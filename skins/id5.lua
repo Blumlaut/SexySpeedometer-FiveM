@@ -60,12 +60,16 @@ local turboLastRPM = 0
 local function SimulateVehicleTurboPressure(veh)
 	if not IsToggleModOn(veh,18) then return 0 end
 	local rpm = GetVehicleCurrentRpm(veh)
+	local speed = GetEntitySpeed(veh)
 	local logRPM = -math.log(rpm)
+	if IsControlJustReleased(0, 71) and turboPressure > .8 then
+		turboPressure = turboPressure-(logRPM/8)
+	end
 	if turboLastRPM == 0 then
 		turboLastRPM = rpm
-	elseif turboLastRPM > rpm then
+	elseif turboLastRPM > rpm and speed*3.6 > 40 then
 		if turboPressure >=0.01 then
-			turboPressure=turboPressure-(turboLastRPM-rpm)
+			turboPressure=turboPressure-((turboLastRPM-rpm)*10)
 		end
 	else
 

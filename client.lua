@@ -142,7 +142,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10)
-		degree, step = 0, cst.RotStep
+		degree, step = 0-(cst.speedDecrease or 0), cst.RotStep
 		if DoesCurrentVehExist then 
 			RPM = GetVehicleCurrentRpm(veh)
 			gear = GetVehicleCurrentGear(veh)+1
@@ -152,8 +152,8 @@ Citizen.CreateThread(function()
 				RPM = RPM+math.random(-2,2)
 				RPM = RPM/100
 			end
-			if GetEntitySpeed(veh) > 0 then degree=(GetEntitySpeed(veh)*2.036936)*step end
-			if degree > 290 then degree=290 end
+			if GetEntitySpeed(veh) > 0 then degree= ((GetEntitySpeed(veh)*2.036936)*step)-(cst.speedDecrease or 0) end
+			--if degree > 290 then degree=290-(cst.speedDecrease or 0) end
 		end
 	end
 end)

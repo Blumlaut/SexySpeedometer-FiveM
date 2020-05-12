@@ -91,9 +91,12 @@ Citizen.CreateThread(function()
 		for i,theSkin in pairs(skins) do
 			if theSkin.skinName == currentSkin then
 				cst = theSkin
+				changeSkin(theSkin.skinName) -- make sure to set the skin properly
 			end
 		end
-		if not cst then changeSkin(skins[1].skinName) end
+		if not cst then 
+			changeSkin(skins[1].skinName) 
+		end
 	end
 end)
 

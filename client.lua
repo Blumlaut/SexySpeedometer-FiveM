@@ -3,6 +3,7 @@ showFuelGauge = true -- use fuel gauge?
 skins = {}
 --SETTINGS END--
 overwriteAlpha = false
+scriptReady = false
 
 local OverriddenTextures = {}
 
@@ -98,6 +99,7 @@ Citizen.CreateThread(function()
 			changeSkin(skins[1].skinName) 
 		end
 	end
+	scriptReady = true
 end)
 
 --cst = {skinName = "default",ytdName = "default",lightsIconLocation = {0.810,0.892,0.018,0.02},blinkerIconLocation = {0.905,0.834,0.022,0.03},fuelIconLocation = {0.905,0.890,0.012,0.025},oilIconLocation = {0.900,0.862,0.020,0.025},engineIconLocation = {0.930,0.892,0.020,0.025},SpeedometerBGLocation = {0.800,0.860,0.12,0.185},SpeedometerNeedleLocation = {0.800,0.862,0.076,0.15},TachometerBGLocation = {0.920,0.860,0.12,0.185},TachoNeedleLocation = {0.920,0.862,0.076,0.15},FuelBGLocation = {0.860, 0.780,0.04, 0.04},FuelGaugeLocation = {0.860,0.800,0.040,0.08},RotMultiplier = 2.036936,RotStep = 2.32833}
@@ -337,5 +339,12 @@ Citizen.CreateThread(function()
 			Citizen.Wait(500)
 		end
 	end
-end
-)
+end)
+
+Citizen.CreateThread(function()
+	repeat
+		Wait(100) -- wait for any slowpokes not adding their skins fast enough
+	until scriptReady
+	TriggerEvent("sexyspeedometer:ready"--[[.. to Rock]], getAvailableSkins(), getCurrentSkin())
+	-- AddEventHandler("sexyspeedometer:Ready", function(skins, currentSkin)
+end)

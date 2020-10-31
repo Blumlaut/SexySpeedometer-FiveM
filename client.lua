@@ -79,6 +79,9 @@ end
 
 Citizen.CreateThread(function()
 	currentSkin = GetResourceKvpString("sexyspeedo_skin")
+	while not skins[1] do
+		Wait(100)
+	end
 	if not currentSkin or currentSkin == "default" then
 		SetResourceKvp("sexyspeedo_skin", "default")
 		if DoesSkinExist("default") then
@@ -127,6 +130,9 @@ end, false)
 
 Citizen.CreateThread(function()
 	PlayerPed = PlayerPedId()
+	repeat
+		Wait(50)
+	until scriptReady
 	while true do
 		Citizen.Wait(300)
 		PlayerPed = PlayerPedId()
@@ -145,6 +151,9 @@ Citizen.CreateThread(function()
 	end
 end)
 Citizen.CreateThread(function()
+	repeat
+		Wait(50)
+	until scriptReady
 	while true do
 		Citizen.Wait(10)
 		degree, step = 0-(cst.speedDecrease or 0), cst.RotStep
@@ -170,6 +179,10 @@ Citizen.CreateThread(function()
 	TriggerEvent('chat:addSuggestion', '/togglespeedo', 'show/hide speedometer' )
 	TriggerEvent('chat:addSuggestion', '/speedoskins', 'show all available speedometer skins' )
 	TriggerEvent('chat:addSuggestion', '/speedoskin', 'change the speedometer skin', { {name='skin', help="the skin name"} } )
+	repeat
+		Wait(50)
+	until scriptReady
+
 	while true do
 		Citizen.Wait(0)
 		if overwriteAlpha then curAlpha = 0 end

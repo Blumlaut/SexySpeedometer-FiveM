@@ -187,7 +187,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 		if overwriteAlpha then curAlpha = 0 end
 		if not overwriteAlpha then
-			if inVehicleAtGetin and GetSeatPedIsTryingToEnter(GetPlayerPed(-1)) == -1 or GetPedInVehicleSeat(veh, -1) == PlayerPed then
+			if inVehicleAtGetin and GetSeatPedIsTryingToEnter(PlayerPedId()) == -1 or GetPedInVehicleSeat(veh, -1) == PlayerPed then
 					if curAlpha >= 255 then
 						curAlpha = 255
 					else

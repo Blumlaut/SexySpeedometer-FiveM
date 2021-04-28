@@ -116,27 +116,27 @@ Citizen.CreateThread(function()
 		if getCurrentSkin() == skinData.skinName then
 			speedTable = {}
 			toggleFuelGauge(false)
-			veh = GetVehiclePedIsUsing(GetPlayerPed(-1))
-			if DoesEntityExist(veh) and not IsEntityDead(veh) then
-				if GetVehicleClass(veh) >= 0 and GetVehicleClass(veh) <= 5 then
+			veh = GetVehiclePedIsUsing(PlayerPed)
+			if DoesCurrentVehExist then
+				if vehclass >= 0 and vehclass <= 5 then
 					labelType = "8k"
 					cst.rpmScale = 235
-				elseif GetVehicleClass(veh) == 6 then
+				elseif vehclass == 6 then
 					labelType = "9k"
 					cst.rpmScale = 235
-				elseif GetVehicleClass(veh) == 7 then
+				elseif vehclass == 7 then
 					labelType = "10k"
 					cst.rpmScale = 235
-				elseif GetVehicleClass(veh) == 8 then
+				elseif vehclass == 8 then
 					labelType = "13k"
 					cst.rpmScale = 235
 				end
 				for i,theName in ipairs(idcars) do
-					if string.find(GetDisplayNameFromVehicleModel(GetEntityModel(veh)), theName) ~= nil and string.find(GetDisplayNameFromVehicleModel(GetEntityModel(veh)), theName) >= 0 then
+					if string.find(GetDisplayNameFromVehicleModel(vehmodel), theName) ~= nil and string.find(GetDisplayNameFromVehicleModel(vehmodel), theName) >= 0 then
 						labelType = "86"
 						cst.rpmScale = 242
 					end
-					if GetDisplayNameFromVehicleModel(GetEntityModel(veh)) == theName then
+					if GetDisplayNameFromVehicleModel(vehmodel) == theName then
 						if not SpeedChimeActive and GetEntitySpeed(veh)*3.6 > 105.0 then
 							SpeedChimeActive = true
 							TriggerEvent("initiald:Sound:PlayOnOne","initiald",0.7,true)
@@ -205,7 +205,7 @@ Citizen.CreateThread(function()
 					DrawSprite(cst.ytdName, "speed_digits_9", cst.centerCoords[1]+cst.Speed1Loc[1],cst.centerCoords[2]+cst.Speed1Loc[2],cst.Speed1Loc[3],cst.Speed1Loc[4], 0.0, 255, 255, 255, curAlpha)
 				end
 				--]]
-				if GetPedInVehicleSeat(veh, -1) == GetPlayerPed(-1) and GetVehicleClass(veh) >= 0 and GetVehicleClass(veh) < 13 or GetVehicleClass(veh) >= 17 then
+				if GetPedInVehicleSeat(veh, -1) == PlayerPed and vehclass >= 0 and vehclass < 13 or vehclass >= 17 then
 					if angle(veh) >= 10 and angle(veh) <= 18 and GetEntityHeightAboveGround(veh) <= 1.5 then
 						driftSprite = "drift_blue"
 						DrawSprite(cst.ytdName, driftSprite, cst.centerCoords[1]+cst.FuelBGLoc[1],cst.centerCoords[2]+cst.FuelBGLoc[2],cst.FuelBGLoc[3],cst.FuelBGLoc[4], 0.0, 255, 255, 255, curDriftAlpha)

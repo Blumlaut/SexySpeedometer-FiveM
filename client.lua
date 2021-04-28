@@ -142,6 +142,7 @@ Citizen.CreateThread(function()
 		DoesCurrentVehExist = (DoesEntityExist(veh) and not IsEntityDead(veh))
 		if DoesCurrentVehExist then 
 			vehclass = GetVehicleClass(veh)
+			vehmodel = GetEntityModel(veh)
 			engineHealth = GetVehicleEngineHealth(veh)
 			OilLevel = GetVehicleOilLevel(veh)
 			FuelLevel = GetVehicleFuelLevel(veh)

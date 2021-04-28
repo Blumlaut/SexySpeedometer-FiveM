@@ -146,13 +146,13 @@ Citizen.CreateThread(function()
 		if getCurrentSkin() == skinData.skinName then
 			if overwriteAlpha then curAlpha = 0 end
 			if not overwriteAlpha then
-				if IsPedInAnyVehicle(GetPlayerPed(-1),true) and GetSeatPedIsTryingToEnter(GetPlayerPed(-1)) == -1 or GetPedInVehicleSeat(veh, -1) == GetPlayerPed(-1) then
+				if IsPedInAnyVehicle(PlayerPed,true) and GetSeatPedIsTryingToEnter(PlayerPed) == -1 or GetPedInVehicleSeat(veh, -1) == PlayerPed then
 						if curAlpha >= 255 then
 							curAlpha = 255
 						else
 							curAlpha = curAlpha+5
 						end
-				elseif not IsPedInAnyVehicle(GetPlayerPed(-1),false) then
+				elseif not IsPedInAnyVehicle(PlayerPed,false) then
 						if curAlpha <= 0 then
 							curAlpha = 0
 						else
@@ -162,27 +162,27 @@ Citizen.CreateThread(function()
 			end
 			speedTable = {}
 			showFuelGauge = false
-			veh = GetVehiclePedIsUsing(GetPlayerPed(-1))
-			if DoesEntityExist(veh) and not IsEntityDead(veh) then
-				if GetVehicleClass(veh) >= 0 and GetVehicleClass(veh) <= 5 then
+			veh = GetVehiclePedIsUsing(PlayerPed)
+			if DoesCurrentVehExist then
+				if vehclass >= 0 and vehclass <= 5 then
 					labelType = "8k"
 					skinData.rpmScale = 200
-				elseif GetVehicleClass(veh) == 6 then
+				elseif vehclass == 6 then
 					labelType = "9k"
 					skinData.rpmScale = 222
-				elseif GetVehicleClass(veh) == 7 then
+				elseif vehclass == 7 then
 					labelType = "10k"
 					skinData.rpmScale = 222
-				elseif GetVehicleClass(veh) == 8 then
+				elseif vehclass == 8 then
 					labelType = "13k"
 					skinData.rpmScale = 220
 				end
 				for i,theName in ipairs(idcars) do
-					if string.find(GetDisplayNameFromVehicleModel(GetEntityModel(veh)), theName) ~= nil and string.find(GetDisplayNameFromVehicleModel(GetEntityModel(veh)), theName) >= 0 then
+					if string.find(GetDisplayNameFromVehicleModel(vehmodel), theName) ~= nil and string.find(GetDisplayNameFromVehicleModel(vehmodel), theName) >= 0 then
 						labelType = "86"
 						skinData.rpmScale = 242
 					end
-					if GetDisplayNameFromVehicleModel(GetEntityModel(veh)) == theName then
+					if GetDisplayNameFromVehicleModel(vehmodel) == theName then
 						if not SpeedChimeActive and GetEntitySpeed(veh)*3.6 > 105.0 then
 							SpeedChimeActive = true
 							TriggerEvent("initiald:Sound:PlayOnOne","initiald",0.7,true)
@@ -271,7 +271,7 @@ Citizen.CreateThread(function()
 					DrawSprite(skinData.ytdName, curTurbo, skinData.centerCoords[1]+skinData.TurboBGLoc[1],skinData.centerCoords[2]+skinData.TurboBGLoc[2],skinData.TurboBGLoc[3],skinData.TurboBGLoc[4], 0.0, 255, 255, 255, curAlpha)
 					DrawSprite(skinData.ytdName, curTurboNeedle, skinData.centerCoords[1]+skinData.TurboGaugeLoc[1],skinData.centerCoords[2]+skinData.TurboGaugeLoc[2],skinData.TurboGaugeLoc[3],skinData.TurboGaugeLoc[4], (boost*135)-678, 255, 255, 255, curAlpha)
 				end
-				if GetPedInVehicleSeat(veh, -1) == GetPlayerPed(-1) and GetVehicleClass(veh) >= 0 and GetVehicleClass(veh) < 13 or GetVehicleClass(veh) >= 17 then
+				if GetPedInVehicleSeat(veh, -1) == PlayerPed and vehclass >= 0 and vehclass < 13 or vehclass >= 17 then
 					if angle(veh) >= 10 and angle(veh) <= 18 and GetEntityHeightAboveGround(veh) <= 1.5 then
 						driftSprite = "drift_blue"
 						DrawSprite(skinData.ytdName, driftSprite, skinData.centerCoords[1]+skinData.FuelBGLoc[1],skinData.centerCoords[2]+skinData.FuelBGLoc[2],skinData.FuelBGLoc[3],skinData.FuelBGLoc[4], 0.0, 255, 255, 255, curDriftAlpha)

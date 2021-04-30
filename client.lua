@@ -127,6 +127,11 @@ RegisterCommand("togglespeedo", function(source, args, rawCommand)
 	toggleSpeedo()
 end, false)
 
+RegisterCommand("speedounit", function(source, args, rawCommand)
+	useKPH = not useKPH
+	cst.useKPH = useKPH
+	SetResourceKvp("initiald_unit", tostring(useKPH))
+end, false)
 
 Citizen.CreateThread(function()
 	PlayerPed = PlayerPedId()
@@ -163,10 +168,9 @@ Citizen.CreateThread(function()
 end)
 Citizen.CreateThread(function()
 	repeat
-		Wait(50)
+		Wait(10)
 	until scriptReady
 	while true do
-		Citizen.Wait(10)
 		degree, step = 0-(cst.speedDecrease or 0), cst.RotStep
 		if (DoesCurrentVehExist) then 
 			RPM = GetVehicleCurrentRpm(veh)
@@ -181,6 +185,7 @@ Citizen.CreateThread(function()
 			if speed > 0 then degree= ((speed*2.036936)*step)-(cst.speedDecrease or 0) end
 			--if degree > 290 then degree=290-(cst.speedDecrease or 0) end
 		end
+		Citizen.Wait(10)
 	end
 end)
 
@@ -322,26 +327,26 @@ Citizen.CreateThread(function()
 				if (cst.enableDigits) then
 
 					if cst.useKPH == true or cst.useKPH == nil then
-						speed = speed* 3.6
+						displayspeed = speed* 3.6
 					else
-						speed = speed*2.236936
+						displayspeed = speed*2.236936
 					end
-					speed = tonumber(string.format("%." .. (0) .. "f", speed))
-					speed = tostring(speed)
+					displayspeed = tonumber(string.format("%." .. (0) .. "f", displayspeed))
+					displayspeed = tostring(displayspeed)
 					local speedTable = {}
-					for i = 1, string.len(speed) do
-						speedTable[i] = speed:sub(i, i)
+					for i = 1, string.len(displayspeed) do
+						speedTable[i] = displayspeed:sub(i, i)
 					end
-					if string.len(speed) == 1 then
+					if string.len(displayspeed) == 1 then
 						DrawSprite(cst.ytdName, "speed_digits_"..speedTable[1], cst.centerCoords[1]+cst.Speed3Loc[1],cst.centerCoords[2]+cst.Speed3Loc[2],cst.Speed3Loc[3],cst.Speed3Loc[4], 0.0, 255, 255, 255, curAlpha)
-					elseif string.len(speed) == 2 then
+					elseif string.len(displayspeed) == 2 then
 						DrawSprite(cst.ytdName, "speed_digits_"..speedTable[1], cst.centerCoords[1]+cst.Speed2Loc[1],cst.centerCoords[2]+cst.Speed2Loc[2],cst.Speed2Loc[3],cst.Speed2Loc[4], 0.0, 255, 255, 255, curAlpha)
 						DrawSprite(cst.ytdName, "speed_digits_"..speedTable[2], cst.centerCoords[1]+cst.Speed3Loc[1],cst.centerCoords[2]+cst.Speed3Loc[2],cst.Speed3Loc[3],cst.Speed3Loc[4], 0.0, 255, 255, 255, curAlpha)
-					elseif string.len(speed) == 3 then
+					elseif string.len(displayspeed) == 3 then
 						DrawSprite(cst.ytdName, "speed_digits_"..speedTable[1], cst.centerCoords[1]+cst.Speed1Loc[1],cst.centerCoords[2]+cst.Speed1Loc[2],cst.Speed1Loc[3],cst.Speed1Loc[4], 0.0, 255, 255, 255, curAlpha)
 						DrawSprite(cst.ytdName, "speed_digits_"..speedTable[2], cst.centerCoords[1]+cst.Speed2Loc[1],cst.centerCoords[2]+cst.Speed2Loc[2],cst.Speed2Loc[3],cst.Speed2Loc[4], 0.0, 255, 255, 255, curAlpha)
 						DrawSprite(cst.ytdName, "speed_digits_"..speedTable[3], cst.centerCoords[1]+cst.Speed3Loc[1],cst.centerCoords[2]+cst.Speed3Loc[2],cst.Speed3Loc[3],cst.Speed3Loc[4], 0.0, 255, 255, 255, curAlpha)
-					elseif string.len(speed) >= 4 then
+					elseif string.len(displayspeed) >= 4 then
 						DrawSprite(cst.ytdName, "speed_digits_9", cst.centerCoords[1]+cst.Speed3Loc[1],cst.centerCoords[2]+cst.Speed3Loc[2],cst.Speed3Loc[3],cst.Speed3Loc[4], 0.0, 255, 255, 255, curAlpha)
 						DrawSprite(cst.ytdName, "speed_digits_9", cst.centerCoords[1]+cst.Speed2Loc[1],cst.centerCoords[2]+cst.Speed2Loc[2],cst.Speed2Loc[3],cst.Speed2Loc[4], 0.0, 255, 255, 255, curAlpha)
 						DrawSprite(cst.ytdName, "speed_digits_9", cst.centerCoords[1]+cst.Speed1Loc[1],cst.centerCoords[2]+cst.Speed1Loc[2],cst.Speed1Loc[3],cst.Speed1Loc[4], 0.0, 255, 255, 255, curAlpha)

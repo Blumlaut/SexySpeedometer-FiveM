@@ -182,10 +182,10 @@ Citizen.CreateThread(function()
 						skinData.rpmScale = 242
 					end
 					if vehdisplayname == theName then
-						if not SpeedChimeActive and GetEntitySpeed(veh)*3.6 > 105.0 then
+						if not SpeedChimeActive and speed*3.6 > 105.0 then
 							SpeedChimeActive = true
 							TriggerEvent("initiald:Sound:PlayOnOne","initiald",0.7,true)
-						elseif SpeedChimeActive and GetEntitySpeed(veh)*3.6 < 105.0 then
+						elseif SpeedChimeActive and speed*3.6 < 105.0 then
 							SpeedChimeActive = false
 							TriggerEvent("initiald:Sound:StopOnOne")
 						end
@@ -194,7 +194,7 @@ Citizen.CreateThread(function()
 
 				if lightson == 1 or highbeams == 1 then
 					curTachometer = "night_labels_"..labelType
-					if useKPH then
+					if cst.useKPH then
 						curTurbo = "turbo"
 					else
 						curTurbo = "turbo_psi"
@@ -202,7 +202,7 @@ Citizen.CreateThread(function()
 					curTurboNeedle = "needle"
 				else
 					curTachometer = "labels_"..labelType
-					if useKPH then
+					if cst.useKPH then
 						curTurbo = "turbo_day"
 					else
 						curTurbo = "turbo_day_psi"
@@ -225,40 +225,14 @@ Citizen.CreateThread(function()
 
 				
 
-				if useKPH then
-					speed = GetEntitySpeed(veh)* 3.6
-				else
-					speed = GetEntitySpeed(veh)*2.236936
-				end
 
-				if useKPH then
+				if cst.useKPH then
 					DrawSprite(skinData.ytdName, "kmh", skinData.centerCoords[1]+skinData.UnitLoc[1],skinData.centerCoords[2]+skinData.UnitLoc[2],skinData.UnitLoc[3],skinData.UnitLoc[4], 0.0, 255, 255, 255, curAlpha)
 				else
 					DrawSprite(skinData.ytdName, "mph", skinData.centerCoords[1]+skinData.UnitLoc[1],skinData.centerCoords[2]+skinData.UnitLoc[2],skinData.UnitLoc[3],skinData.UnitLoc[4], 0.0, 255, 255, 255, curAlpha)
 				end
 
-				if not speed then speed = "0.0" end
-				--[[
-				speed = tonumber(string.format("%." .. (0) .. "f", speed))
-				speed = tostring(speed)
-				for i = 1, string.len(speed) do
-					speedTable[i] = speed:sub(i, i)
-				end
-				if string.len(speed) == 1 then
-					DrawSprite(skinData.ytdName, "speed_digits_"..speedTable[1], skinData.centerCoords[1]+skinData.Speed3Loc[1],skinData.centerCoords[2]+skinData.Speed3Loc[2],skinData.Speed3Loc[3],skinData.Speed3Loc[4], 0.0, 255, 255, 255, curAlpha)
-				elseif string.len(speed) == 2 then
-					DrawSprite(skinData.ytdName, "speed_digits_"..speedTable[1], skinData.centerCoords[1]+skinData.Speed2Loc[1],skinData.centerCoords[2]+skinData.Speed2Loc[2],skinData.Speed2Loc[3],skinData.Speed2Loc[4], 0.0, 255, 255, 255, curAlpha)
-					DrawSprite(skinData.ytdName, "speed_digits_"..speedTable[2], skinData.centerCoords[1]+skinData.Speed3Loc[1],skinData.centerCoords[2]+skinData.Speed3Loc[2],skinData.Speed3Loc[3],skinData.Speed3Loc[4], 0.0, 255, 255, 255, curAlpha)
-				elseif string.len(speed) == 3 then
-					DrawSprite(skinData.ytdName, "speed_digits_"..speedTable[1], skinData.centerCoords[1]+skinData.Speed1Loc[1],skinData.centerCoords[2]+skinData.Speed1Loc[2],skinData.Speed1Loc[3],skinData.Speed1Loc[4], 0.0, 255, 255, 255, curAlpha)
-					DrawSprite(skinData.ytdName, "speed_digits_"..speedTable[2], skinData.centerCoords[1]+skinData.Speed2Loc[1],skinData.centerCoords[2]+skinData.Speed2Loc[2],skinData.Speed2Loc[3],skinData.Speed2Loc[4], 0.0, 255, 255, 255, curAlpha)
-					DrawSprite(skinData.ytdName, "speed_digits_"..speedTable[3], skinData.centerCoords[1]+skinData.Speed3Loc[1],skinData.centerCoords[2]+skinData.Speed3Loc[2],skinData.Speed3Loc[3],skinData.Speed3Loc[4], 0.0, 255, 255, 255, curAlpha)
-				elseif string.len(speed) >= 4 then
-					DrawSprite(skinData.ytdName, "speed_digits_9", skinData.centerCoords[1]+skinData.Speed3Loc[1],skinData.centerCoords[2]+skinData.Speed3Loc[2],skinData.Speed3Loc[3],skinData.Speed3Loc[4], 0.0, 255, 255, 255, curAlpha)
-					DrawSprite(skinData.ytdName, "speed_digits_9", skinData.centerCoords[1]+skinData.Speed2Loc[1],skinData.centerCoords[2]+skinData.Speed2Loc[2],skinData.Speed2Loc[3],skinData.Speed2Loc[4], 0.0, 255, 255, 255, curAlpha)
-					DrawSprite(skinData.ytdName, "speed_digits_9", skinData.centerCoords[1]+skinData.Speed1Loc[1],skinData.centerCoords[2]+skinData.Speed1Loc[2],skinData.Speed1Loc[3],skinData.Speed1Loc[4], 0.0, 255, 255, 255, curAlpha)
-				end
-				]]
+
 				local boost = SimulateVehicleTurboPressure(veh) 
 				if boost > 0.0 then
 
@@ -298,12 +272,6 @@ function switchUnit()
 end
 
 Citizen.CreateThread(function()
-	RegisterCommand("speedounit", function(source, args, rawCommand)
-		if getCurrentSkin() == skinData.skinName then
-			useKPH = not useKPH
-			SetResourceKvp("initiald_unit", tostring(useKPH))
-		end
-	end, false)
 
 
 	RegisterNetEvent('initiald:Sound:PlayOnOne')

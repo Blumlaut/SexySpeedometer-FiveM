@@ -82,6 +82,10 @@ Citizen.CreateThread(function()
 	while not skins[1] do
 		Wait(100)
 	end
+	-- init values
+	RPM = 0
+	gear = 0
+	speed = 0
 	if not currentSkin or currentSkin == "default" then
 		SetResourceKvp("sexyspeedo_skin", "default")
 		if DoesSkinExist("default") then

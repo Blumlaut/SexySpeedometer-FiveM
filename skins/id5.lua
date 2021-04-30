@@ -244,6 +244,8 @@ Citizen.CreateThread(function()
 
 
 			end
+		else
+			Wait(500)
 		end
 	end
 end)

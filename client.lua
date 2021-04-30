@@ -184,6 +184,8 @@ Citizen.CreateThread(function()
 			end
 			if speed > 0 then degree= ((speed*2.036936)*step)-(cst.speedDecrease or 0) end
 			--if degree > 290 then degree=290-(cst.speedDecrease or 0) end
+		else
+			Wait(200)
 		end
 		Citizen.Wait(10)
 	end
@@ -197,26 +199,28 @@ Citizen.CreateThread(function()
 	TriggerEvent('chat:addSuggestion', '/speedoskins', 'show all available speedometer skins' )
 	TriggerEvent('chat:addSuggestion', '/speedoskin', 'change the speedometer skin', { {name='skin', help="the skin name"} } )
 	repeat
-		Wait(50)
+		Wait(500)
 	until scriptReady
 
 	while true do
 		Citizen.Wait(0)
-		if overwriteAlpha then curAlpha = 0 end
-		if not overwriteAlpha then
-			if inVehicleAtGetin and GetSeatPedIsTryingToEnter(PlayerPed) == -1 or pedInVehicleSeat == PlayerPed then
+		if (inVehicleAtGetin or inVehicle) then
+			if overwriteAlpha then curAlpha = 0 end
+			if not overwriteAlpha then
+				if inVehicleAtGetin and GetSeatPedIsTryingToEnter(PlayerPed) == -1 or pedInVehicleSeat == PlayerPed then
 					if curAlpha >= 255 then
 						curAlpha = 255
 					else
 						curAlpha = curAlpha+5
 					end
-			elseif not inVehicle then
-					if curAlpha <= 0 then
-						curAlpha = 0
-					else
-						curAlpha = curAlpha-5
-					end
 				end
+			end
+		else
+			if curAlpha <= 0 then
+				curAlpha = 0
+			else
+				curAlpha = curAlpha-5
+			end
 		end
 
 		if not HasTextureDictLoaded then
@@ -226,6 +230,7 @@ Citizen.CreateThread(function()
 			end
 		else
 			if (DoesCurrentVehExist) then
+				if cst.useKPH == nil then cst.useKPH = true end
 				blinkerstate = vehindicators -- owo whats this
 				if blinkerstate == 0 then
 					blinkerleft,blinkerright = false,false
@@ -363,7 +368,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		if curAlpha ~= 0 and (blinkerleft or blinkerright) then
+		if DoesCurrentVehExist and (blinkerleft or blinkerright) then
 			showBlinker = true
 			Citizen.Wait(500)
 			showBlinker = false

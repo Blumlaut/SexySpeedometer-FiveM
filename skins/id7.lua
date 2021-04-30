@@ -111,6 +111,9 @@ SpeedChimeActive = false
 
 
 Citizen.CreateThread(function()
+	repeat
+		Wait(50)
+	until scriptReady
 	while true do
 		Citizen.Wait(0)
 		if getCurrentSkin() == skinData.skinName and (inVehicleAtGetin or inVehicle) then
@@ -136,10 +139,10 @@ Citizen.CreateThread(function()
 						cst.rpmScale = 242
 					end
 					if vehdisplayname == theName then
-						if not SpeedChimeActive and GetEntitySpeed(veh)*3.6 > 105.0 then
+						if not SpeedChimeActive and speed*3.6 > 105.0 then
 							SpeedChimeActive = true
 							TriggerEvent("initiald:Sound:PlayOnOne","initiald",0.7,true)
-						elseif SpeedChimeActive and GetEntitySpeed(veh)*3.6 < 105.0 then
+						elseif SpeedChimeActive and speed*3.6 < 105.0 then
 							SpeedChimeActive = false
 							TriggerEvent("initiald:Sound:StopOnOne")
 						end
@@ -176,15 +179,16 @@ Citizen.CreateThread(function()
 					DrawSprite(cst.ytdName, "mph", cst.centerCoords[1]+cst.UnitLoc[1],cst.centerCoords[2]+cst.UnitLoc[2],cst.UnitLoc[3],cst.UnitLoc[4], 0.0, 255, 255, 255, curAlpha)
 				end
 				if pedInVehicleSeat == PlayerPed and vehclass >= 0 and vehclass < 13 or vehclass >= 17 then
-					if angle(veh) >= 10 and angle(veh) <= 18 and GetEntityHeightAboveGround(veh) <= 1.5 then
+					local aboveGround = GetEntityHeightAboveGround(veh)
+					if angle(veh) >= 10 and angle(veh) <= 18 and aboveGround <= 1.5 then
 						driftSprite = "drift_blue"
 						DrawSprite(cst.ytdName, driftSprite, cst.centerCoords[1]+cst.FuelBGLoc[1],cst.centerCoords[2]+cst.FuelBGLoc[2],cst.FuelBGLoc[3],cst.FuelBGLoc[4], 0.0, 255, 255, 255, curDriftAlpha)
 						BlinkDriftText(false)
-					elseif angle(veh) > 18 and GetEntityHeightAboveGround(veh) <= 1.5 then
+					elseif angle(veh) > 18 and aboveGround <= 1.5 then
 						driftSprite = "drift_yellow"
 						DrawSprite(cst.ytdName, driftSprite, cst.centerCoords[1]+cst.FuelBGLoc[1],cst.centerCoords[2]+cst.FuelBGLoc[2],cst.FuelBGLoc[3],cst.FuelBGLoc[4], 0.0, 255, 255, 255, curDriftAlpha)
 						BlinkDriftText(false)
-					elseif angle(veh) < 10 and GetEntityHeightAboveGround(veh) <= 1.5 then
+					elseif angle(veh) < 10 and aboveGround <= 1.5 then
 						driftSprite = "drift_blue"
 						DrawSprite(cst.ytdName, driftSprite, cst.centerCoords[1]+cst.FuelBGLoc[1],cst.centerCoords[2]+cst.FuelBGLoc[2],cst.FuelBGLoc[3],cst.FuelBGLoc[4], 0.0, 255, 255, 255, curDriftAlpha)
 						BlinkDriftText(true)

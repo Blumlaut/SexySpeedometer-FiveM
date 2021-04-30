@@ -55,7 +55,6 @@ addSkin(skinData)
 local idcars = {"FUTO", "AE86", "86", "BLISTA2", "86coupe", "levin86"} -- cars that use the AE86 speed chime and ae86 RPM background
 local labelType = "8k"
 local curDriftAlpha = 0
-local curAlpha = 0
 local useKPH = GetResourceKvpString("initiald_unit") -- handle our unit saving
 if not useKPH then
 	SetResourceKvp("initiald_unit", "true")
@@ -102,25 +101,12 @@ SpeedChimeActive = false
 
 
 Citizen.CreateThread(function()
+	repeat
+		Wait(50)
+	until scriptReady
 	while true do
 		Citizen.Wait(0)
 		if getCurrentSkin() == skinData.skinName and (inVehicleAtGetin or inVehicle) then
-			if overwriteAlpha then curAlpha = 0 end
-			if not overwriteAlpha then
-				if IsPedInAnyVehicle(PlayerPed,true) and GetSeatPedIsTryingToEnter(PlayerPed) == -1 or pedInVehicleSeat == PlayerPed then
-						if curAlpha >= 255 then
-							curAlpha = 255
-						else
-							curAlpha = curAlpha+5
-						end
-				elseif not IsPedInAnyVehicle(PlayerPed,false) then
-						if curAlpha <= 0 then
-							curAlpha = 0
-						else
-							curAlpha = curAlpha-5
-						end
-					end
-			end
 			speedTable = {}
 			showFuelGauge = false
 			if DoesCurrentVehExist then
@@ -143,10 +129,10 @@ Citizen.CreateThread(function()
 						skinData.rpmScale = 242
 					end
 					if vehdisplayname == theName then
-						if not SpeedChimeActive and GetEntitySpeed(veh)*3.6 > 105.0 then
+						if not SpeedChimeActive and speed*3.6 > 105.0 then
 							SpeedChimeActive = true
 							TriggerEvent("initiald:Sound:PlayOnOne","initiald",0.7,true)
-						elseif SpeedChimeActive and GetEntitySpeed(veh)*3.6 < 105.0 then
+						elseif SpeedChimeActive and speed*3.6 < 105.0 then
 							SpeedChimeActive = false
 							TriggerEvent("initiald:Sound:StopOnOne")
 						end
@@ -174,15 +160,16 @@ Citizen.CreateThread(function()
 			
 
 				if pedInVehicleSeat == PlayerPed and vehclass >= 0 and vehclass < 13 or vehclass >= 17 then
-					if angle(veh) >= 10 and angle(veh) <= 18 and GetEntityHeightAboveGround(veh) <= 1.5 then
+					local aboveGround = GetEntityHeightAboveGround(veh)
+					if angle(veh) >= 10 and angle(veh) <= 18 and aboveGround <= 1.5 then
 						driftSprite = "drift_blue"
 						DrawSprite(skinData.ytdName, driftSprite, skinData.centerCoords[1]+skinData.FuelBGLoc[1],skinData.centerCoords[2]+skinData.FuelBGLoc[2],skinData.FuelBGLoc[3],skinData.FuelBGLoc[4], 0.0, 255, 255, 255, curDriftAlpha)
 						BlinkDriftText(false)
-					elseif angle(veh) > 18 and GetEntityHeightAboveGround(veh) <= 1.5 then
+					elseif angle(veh) > 18 and aboveGround <= 1.5 then
 						driftSprite = "drift_yellow"
 						DrawSprite(skinData.ytdName, driftSprite, skinData.centerCoords[1]+skinData.FuelBGLoc[1],skinData.centerCoords[2]+skinData.FuelBGLoc[2],skinData.FuelBGLoc[3],skinData.FuelBGLoc[4], 0.0, 255, 255, 255, curDriftAlpha)
 						BlinkDriftText(false)
-					elseif angle(veh) < 10 and GetEntityHeightAboveGround(veh) <= 1.5 then
+					elseif angle(veh) < 10 and aboveGround <= 1.5 then
 						driftSprite = "drift_blue"
 						DrawSprite(skinData.ytdName, driftSprite, skinData.centerCoords[1]+skinData.FuelBGLoc[1],skinData.centerCoords[2]+skinData.FuelBGLoc[2],skinData.FuelBGLoc[3],skinData.FuelBGLoc[4], 0.0, 255, 255, 255, curDriftAlpha)
 						BlinkDriftText(true)

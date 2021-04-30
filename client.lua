@@ -138,16 +138,18 @@ Citizen.CreateThread(function()
 		PlayerPed = PlayerPedId()
 		inVehicleAtGetin = IsPedInAnyVehicle(PlayerPed, true)
 		inVehicle = IsPedInAnyVehicle(PlayerPed, false)
-		veh = GetVehiclePedIsUsing(PlayerPed)
-		DoesCurrentVehExist = (DoesEntityExist(veh) and not IsEntityDead(veh))
-		if DoesCurrentVehExist then 
-			vehclass = GetVehicleClass(veh)
-			vehmodel = GetEntityModel(veh)
-			engineHealth = GetVehicleEngineHealth(veh)
-			OilLevel = GetVehicleOilLevel(veh)
-			FuelLevel = GetVehicleFuelLevel(veh)
-			_,lightson,highbeams = GetVehicleLightsState(veh)
-			MaxFuelLevel = Citizen.InvokeNative(0x642FC12F, veh, "CHandlingData", "fPetrolTankVolume", Citizen.ReturnResultAnyway(), Citizen.ResultAsFloat())
+		if inVehicleAtGetin or inVehicle then
+			veh = GetVehiclePedIsUsing(PlayerPed)
+			DoesCurrentVehExist = (DoesEntityExist(veh) and not IsEntityDead(veh))
+			if DoesCurrentVehExist then 
+				vehclass = GetVehicleClass(veh)
+				vehmodel = GetEntityModel(veh)
+				engineHealth = GetVehicleEngineHealth(veh)
+				OilLevel = GetVehicleOilLevel(veh)
+				FuelLevel = GetVehicleFuelLevel(veh)
+				_,lightson,highbeams = GetVehicleLightsState(veh)
+				MaxFuelLevel = Citizen.InvokeNative(0x642FC12F, veh, "CHandlingData", "fPetrolTankVolume", Citizen.ReturnResultAnyway(), Citizen.ResultAsFloat())
+			end
 		end
 	end
 end)

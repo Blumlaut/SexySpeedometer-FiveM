@@ -104,7 +104,7 @@ SpeedChimeActive = false
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		if getCurrentSkin() == skinData.skinName then
+		if getCurrentSkin() == skinData.skinName and (inVehicleAtGetin or inVehicle) then
 			if overwriteAlpha then curAlpha = 0 end
 			if not overwriteAlpha then
 				if IsPedInAnyVehicle(PlayerPed,true) and GetSeatPedIsTryingToEnter(PlayerPed) == -1 or GetPedInVehicleSeat(veh, -1) == PlayerPed then

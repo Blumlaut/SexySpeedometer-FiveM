@@ -113,7 +113,7 @@ SpeedChimeActive = false
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		if getCurrentSkin() == skinData.skinName then
+		if getCurrentSkin() == skinData.skinName and (inVehicleAtGetin or inVehicle) then
 			speedTable = {}
 			toggleFuelGauge(false)
 			veh = GetVehiclePedIsUsing(PlayerPed)

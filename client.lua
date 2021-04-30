@@ -138,6 +138,7 @@ Citizen.CreateThread(function()
 		PlayerPed = PlayerPedId()
 		inVehicleAtGetin = IsPedInAnyVehicle(PlayerPed, true)
 		inVehicle = IsPedInAnyVehicle(PlayerPed, false)
+		HasTextureDictLoaded = HasStreamedTextureDictLoaded(cst.ytdName)
 		if inVehicleAtGetin or inVehicle then
 			veh = GetVehiclePedIsUsing(PlayerPed)
 			DoesCurrentVehExist = (DoesEntityExist(veh) and not IsEntityDead(veh))
@@ -148,8 +149,15 @@ Citizen.CreateThread(function()
 				OilLevel = GetVehicleOilLevel(veh)
 				FuelLevel = GetVehicleFuelLevel(veh)
 				_,lightson,highbeams = GetVehicleLightsState(veh)
+				vehdisplayname = GetDisplayNameFromVehicleModel(vehmodel)
+				vehindicators = GetVehicleIndicatorLights(veh)
+				pedInVehicleSeat = GetPedInVehicleSeat(veh, -1)
 				MaxFuelLevel = Citizen.InvokeNative(0x642FC12F, veh, "CHandlingData", "fPetrolTankVolume", Citizen.ReturnResultAnyway(), Citizen.ResultAsFloat())
 			end
+		else
+			veh = nil
+			DoesCurrentVehExist = false
+			pedInVehicleSeat = nil
 		end
 	end
 end)
@@ -160,16 +168,17 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10)
 		degree, step = 0-(cst.speedDecrease or 0), cst.RotStep
-		if DoesCurrentVehExist then 
+		if (DoesCurrentVehExist) then 
 			RPM = GetVehicleCurrentRpm(veh)
 			gear = GetVehicleCurrentGear(veh)+1
+			speed = GetEntitySpeed(veh)
 			if not GetIsVehicleEngineRunning(veh) then RPM = 0 end -- fix for R*'s Engine RPM fuckery
 			if RPM > 0.99 then
 				RPM = RPM*100
 				RPM = RPM+math.random(-2,2)
 				RPM = RPM/100
 			end
-			if GetEntitySpeed(veh) > 0 then degree= ((GetEntitySpeed(veh)*2.036936)*step)-(cst.speedDecrease or 0) end
+			if speed > 0 then degree= ((speed*2.036936)*step)-(cst.speedDecrease or 0) end
 			--if degree > 290 then degree=290-(cst.speedDecrease or 0) end
 		end
 	end
@@ -190,7 +199,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 		if overwriteAlpha then curAlpha = 0 end
 		if not overwriteAlpha then
-			if inVehicleAtGetin and GetSeatPedIsTryingToEnter(PlayerPed) == -1 or GetPedInVehicleSeat(veh, -1) == PlayerPed then
+			if inVehicleAtGetin and GetSeatPedIsTryingToEnter(PlayerPed) == -1 or pedInVehicleSeat == PlayerPed then
 					if curAlpha >= 255 then
 						curAlpha = 255
 					else
@@ -205,14 +214,14 @@ Citizen.CreateThread(function()
 				end
 		end
 
-		if not HasStreamedTextureDictLoaded(cst.ytdName) then
+		if not HasTextureDictLoaded then
 			RequestStreamedTextureDict(cst.ytdName, true)
-			while not HasStreamedTextureDictLoaded(cst.ytdName) do
+			while not HasTextureDictLoaded do
 				Wait(0)
 			end
 		else
-			if DoesCurrentVehExist then
-				blinkerstate = GetVehicleIndicatorLights(veh) -- owo whats this
+			if (DoesCurrentVehExist) then
+				blinkerstate = vehindicators -- owo whats this
 				if blinkerstate == 0 then
 					blinkerleft,blinkerright = false,false
 				elseif blinkerstate == 1 then
@@ -311,7 +320,6 @@ Citizen.CreateThread(function()
 				end
 
 				if (cst.enableDigits) then
-					local speed = GetEntitySpeed(veh)
 
 					if cst.useKPH == true or cst.useKPH == nil then
 						speed = speed* 3.6

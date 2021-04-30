@@ -60,7 +60,7 @@ local turboLastRPM = 0
 local function SimulateVehicleTurboPressure(veh)
 	if not IsToggleModOn(veh,18) then return 0 end
 	local rpm = GetVehicleCurrentRpm(veh)
-	local speed = GetEntitySpeed(veh)
+	
 	local logRPM = -math.log(rpm)
 	if IsControlJustReleased(0, 71) and turboPressure > .8 then
 		turboPressure = turboPressure-(logRPM/8)
@@ -106,7 +106,7 @@ elseif useKPH == "false" then
 	useKPH = false
 end
 
-function angle(veh)
+local function angle(veh)
 	if not veh then return false end
 	local vx,vy,vz = table.unpack(GetEntityVelocity(veh))
 	local modV = math.sqrt(vx*vx + vy*vy)
@@ -115,7 +115,7 @@ function angle(veh)
 	local rx,ry,rz = table.unpack(GetEntityRotation(veh,0))
 	local sn,cs = -math.sin(math.rad(rz)), math.cos(math.rad(rz))
 
-	if GetEntitySpeed(veh)* 3.6 < 40 or GetVehicleCurrentGear(veh) == 0 then return 0,modV end --speed over 25 km/h
+	if speed* 3.6 < 40 or gear == 0 then return 0,modV end --speed over 25 km/h
 
 	local cosX = (sn*vx + cs*vy)/modV
 	return math.deg(math.acos(cosX))*0.5, modV
@@ -146,13 +146,13 @@ Citizen.CreateThread(function()
 		if getCurrentSkin() == skinData.skinName and (inVehicleAtGetin or inVehicle) then
 			if overwriteAlpha then curAlpha = 0 end
 			if not overwriteAlpha then
-				if IsPedInAnyVehicle(PlayerPed,true) and GetSeatPedIsTryingToEnter(PlayerPed) == -1 or GetPedInVehicleSeat(veh, -1) == PlayerPed then
+				if inVehicleAtGetin and GetSeatPedIsTryingToEnter(PlayerPed) == -1 or pedInVehicleSeat == PlayerPed then
 						if curAlpha >= 255 then
 							curAlpha = 255
 						else
 							curAlpha = curAlpha+5
 						end
-				elseif not IsPedInAnyVehicle(PlayerPed,false) then
+				elseif not inVehicle then
 						if curAlpha <= 0 then
 							curAlpha = 0
 						else
@@ -162,7 +162,6 @@ Citizen.CreateThread(function()
 			end
 			speedTable = {}
 			showFuelGauge = false
-			veh = GetVehiclePedIsUsing(PlayerPed)
 			if DoesCurrentVehExist then
 				if vehclass >= 0 and vehclass <= 5 then
 					labelType = "8k"
@@ -178,11 +177,11 @@ Citizen.CreateThread(function()
 					skinData.rpmScale = 220
 				end
 				for i,theName in ipairs(idcars) do
-					if string.find(GetDisplayNameFromVehicleModel(vehmodel), theName) ~= nil and string.find(GetDisplayNameFromVehicleModel(vehmodel), theName) >= 0 then
+					if string.find(vehdisplayname, theName) ~= nil and string.find(vehdisplayname, theName) >= 0 then
 						labelType = "86"
 						skinData.rpmScale = 242
 					end
-					if GetDisplayNameFromVehicleModel(vehmodel) == theName then
+					if vehdisplayname == theName then
 						if not SpeedChimeActive and GetEntitySpeed(veh)*3.6 > 105.0 then
 							SpeedChimeActive = true
 							TriggerEvent("initiald:Sound:PlayOnOne","initiald",0.7,true)
@@ -193,7 +192,6 @@ Citizen.CreateThread(function()
 					end
 				end
 
-				_,lightson,highbeams = GetVehicleLightsState(veh)
 				if lightson == 1 or highbeams == 1 then
 					curTachometer = "night_labels_"..labelType
 					if useKPH then
@@ -213,7 +211,7 @@ Citizen.CreateThread(function()
 				end
 				local curSpeedometer = "nodrift_background"
 
-				local gear = GetVehicleCurrentGear(veh)+1
+				
 
 				if not gear then gear = 1 end
 				if gear == 1 then gear = 0 end
@@ -225,7 +223,7 @@ Citizen.CreateThread(function()
 				--DrawSprite(skinData.ytdName, curTachometer, skinData.centerCoords[1]+skinData.TachoBGloc[1],skinData.centerCoords[2]+skinData.TachoBGloc[2],skinData.TachoBGloc[3],skinData.TachoBGloc[4], 0.0, 255, 255, 255, curAlpha)
 				--DrawSprite(skinData.ytdName, "gear_"..gear, skinData.centerCoords[1]+skinData.GearLoc[1],skinData.centerCoords[2]+skinData.GearLoc[2],skinData.GearLoc[3],skinData.GearLoc[4], 0.0, 255, 255, 255, curAlpha)
 
-				local speed = GetEntitySpeed(veh)
+				
 
 				if useKPH then
 					speed = GetEntitySpeed(veh)* 3.6
@@ -271,7 +269,7 @@ Citizen.CreateThread(function()
 					DrawSprite(skinData.ytdName, curTurbo, skinData.centerCoords[1]+skinData.TurboBGLoc[1],skinData.centerCoords[2]+skinData.TurboBGLoc[2],skinData.TurboBGLoc[3],skinData.TurboBGLoc[4], 0.0, 255, 255, 255, curAlpha)
 					DrawSprite(skinData.ytdName, curTurboNeedle, skinData.centerCoords[1]+skinData.TurboGaugeLoc[1],skinData.centerCoords[2]+skinData.TurboGaugeLoc[2],skinData.TurboGaugeLoc[3],skinData.TurboGaugeLoc[4], (boost*135)-678, 255, 255, 255, curAlpha)
 				end
-				if GetPedInVehicleSeat(veh, -1) == PlayerPed and vehclass >= 0 and vehclass < 13 or vehclass >= 17 then
+				if pedInVehicleSeat == PlayerPed and vehclass >= 0 and vehclass < 13 or vehclass >= 17 then
 					if angle(veh) >= 10 and angle(veh) <= 18 and GetEntityHeightAboveGround(veh) <= 1.5 then
 						driftSprite = "drift_blue"
 						DrawSprite(skinData.ytdName, driftSprite, skinData.centerCoords[1]+skinData.FuelBGLoc[1],skinData.centerCoords[2]+skinData.FuelBGLoc[2],skinData.FuelBGLoc[3],skinData.FuelBGLoc[4], 0.0, 255, 255, 255, curDriftAlpha)

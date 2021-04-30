@@ -152,7 +152,7 @@ Citizen.CreateThread(function()
 				vehdisplayname = GetDisplayNameFromVehicleModel(vehmodel)
 				vehindicators = GetVehicleIndicatorLights(veh)
 				pedInVehicleSeat = GetPedInVehicleSeat(veh, -1)
-				MaxFuelLevel = Citizen.InvokeNative(0x642FC12F, veh, "CHandlingData", "fPetrolTankVolume", Citizen.ReturnResultAnyway(), Citizen.ResultAsFloat())
+				MaxFuelLevel = GetVehicleHandlingFloat(veh, "CHandlingData", "fPetrolTankVolume")
 			end
 		else
 			veh = nil

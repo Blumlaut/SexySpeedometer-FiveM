@@ -117,7 +117,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		if getCurrentSkin() == skinData.skinName and (inVehicleAtGetin or inVehicle) then
-			speedTable = {}
+
 			toggleFuelGauge(false)
 			if DoesCurrentVehExist then
 				if vehclass >= 0 and vehclass <= 5 then
